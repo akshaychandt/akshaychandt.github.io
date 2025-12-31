@@ -1,0 +1,77 @@
+# =========================
+# System / Misc
+# =========================
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.history/
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# =========================
+# IDEs
+# =========================
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code (optional – keep commented if you want to commit settings)
+#.vscode/
+
+# =========================
+# Flutter / Dart
+# =========================
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+coverage/
+build/
+
+# Flutter Web specific
+web/.dart_tool/
+web/.metadata
+
+# =========================
+# Platforms (ignore all)
+# =========================
+android/
+ios/
+macos/
+windows/
+linux/
+
+# =========================
+# Android build artifacts
+# =========================
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# =========================
+# iOS / Xcode
+# =========================
+ios/Flutter/.last_build_id
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+Podfile.lock
+
+# =========================
+# Obfuscation / Symbols
+# =========================
+app.*.symbols
+app.*.map.json
+
+# =========================
+# GitHub Pages (IMPORTANT)
+# =========================
+# We WANT docs/ to be committed
+# Do NOT ignore docs/
