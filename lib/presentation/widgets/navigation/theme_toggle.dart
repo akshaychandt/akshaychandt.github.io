@@ -16,17 +16,11 @@ class ThemeToggle extends StatefulWidget {
 
 class _ThemeToggleState extends State<ThemeToggle> {
   void _onEnter(BuildContext context) {
-    if (kIsWeb) {
-      final provider = CursorScope.maybeOf(context);
-      provider?.setState(CursorState.hovering);
-    }
+    if (kIsWeb) CursorScope.maybeOf(context)?.setState(CursorState.hovering);
   }
 
   void _onExit(BuildContext context) {
-    if (kIsWeb) {
-      final provider = CursorScope.maybeOf(context);
-      provider?.setState(CursorState.normal);
-    }
+    if (kIsWeb) CursorScope.maybeOf(context)?.setState(CursorState.normal);
   }
 
   @override

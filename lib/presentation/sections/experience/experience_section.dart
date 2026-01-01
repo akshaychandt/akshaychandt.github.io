@@ -299,52 +299,32 @@ class _TimelineItemWithLineState extends State<_TimelineItemWithLine> {
     );
   }
 
-  Widget _buildMetaChip(BuildContext context, IconData icon, String text) {
-    final theme = Theme.of(context);
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          size: 14,
-          color: theme.textTheme.bodySmall?.color,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: theme.textTheme.bodySmall,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildResponsibility(BuildContext context, String text) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildMetaChip(BuildContext context, IconData icon, String text) => Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 6),
-            width: 5,
-            height: 5,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              text,
-              style: theme.textTheme.bodySmall,
-            ),
-          ),
+          Icon(icon, size: 14, color: Theme.of(context).textTheme.bodySmall?.color),
+          const SizedBox(width: 4),
+          Text(text, style: Theme.of(context).textTheme.bodySmall),
         ],
-      ),
-    );
-  }
+      );
+
+  Widget _buildResponsibility(BuildContext context, String text) => Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 6),
+              width: 5,
+              height: 5,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(child: Text(text, style: Theme.of(context).textTheme.bodySmall)),
+          ],
+        ),
+      );
 }

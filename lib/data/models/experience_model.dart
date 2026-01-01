@@ -23,12 +23,7 @@ class ExperienceModel extends Equatable {
     this.logoUrl,
   });
 
-  String get duration {
-    if (isCurrent) {
-      return '$startDate - Present';
-    }
-    return '$startDate - $endDate';
-  }
+  String get duration => isCurrent ? '$startDate - Present' : '$startDate - $endDate';
 
   @override
   List<Object?> get props => [

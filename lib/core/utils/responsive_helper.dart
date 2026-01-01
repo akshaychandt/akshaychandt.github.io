@@ -40,31 +40,23 @@ class ResponsiveHelper {
     required double mobile,
     double? tablet,
     double? desktop,
-  }) {
-    return responsive<double>(
-      context,
-      mobile: mobile,
-      tablet: tablet,
-      desktop: desktop,
-    );
-  }
+  }) =>
+      responsive<double>(context, mobile: mobile, tablet: tablet, desktop: desktop);
 
-  static EdgeInsets sectionPadding(BuildContext context) {
-    return EdgeInsets.symmetric(
-      horizontal: responsive<double>(
-        context,
-        mobile: AppDimensions.sectionPaddingMobile,
-        tablet: AppDimensions.sectionPaddingTablet,
-        desktop: AppDimensions.sectionPaddingDesktop,
-      ),
-      vertical: responsive<double>(
-        context,
-        mobile: AppDimensions.spacingXxl,
-        tablet: AppDimensions.spacing3xl,
-        desktop: AppDimensions.spacing4xl,
-      ),
-    );
-  }
+  static EdgeInsets sectionPadding(BuildContext context) => EdgeInsets.symmetric(
+        horizontal: responsive<double>(
+          context,
+          mobile: AppDimensions.sectionPaddingMobile,
+          tablet: AppDimensions.sectionPaddingTablet,
+          desktop: AppDimensions.sectionPaddingDesktop,
+        ),
+        vertical: responsive<double>(
+          context,
+          mobile: AppDimensions.spacingXxl,
+          tablet: AppDimensions.spacing3xl,
+          desktop: AppDimensions.spacing4xl,
+        ),
+      );
 
   static double contentMaxWidth(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;

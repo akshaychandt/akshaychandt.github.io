@@ -34,42 +34,33 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Left: Bio Card
-        Expanded(
-          flex: 5,
-          child: _buildBioCard(context),
-        ),
-        const SizedBox(width: 32),
-        // Right: Stats + Highlights
-        Expanded(
-          flex: 4,
-          child: Column(
-            children: [
-              _buildStatsRow(context),
-              const SizedBox(height: 24),
-              _buildHighlightsCard(context),
-            ],
+  Widget _buildDesktopLayout(BuildContext context) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(flex: 5, child: _buildBioCard(context)),
+          const SizedBox(width: 32),
+          Expanded(
+            flex: 4,
+            child: Column(
+              children: [
+                _buildStatsRow(context),
+                const SizedBox(height: 24),
+                _buildHighlightsCard(context),
+              ],
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 
-  Widget _buildMobileLayout(BuildContext context) {
-    return Column(
-      children: [
-        _buildBioCard(context),
-        const SizedBox(height: 24),
-        _buildStatsRow(context),
-        const SizedBox(height: 24),
-        _buildHighlightsCard(context),
-      ],
-    );
-  }
+  Widget _buildMobileLayout(BuildContext context) => Column(
+        children: [
+          _buildBioCard(context),
+          const SizedBox(height: 24),
+          _buildStatsRow(context),
+          const SizedBox(height: 24),
+          _buildHighlightsCard(context),
+        ],
+      );
 
   Widget _buildBioCard(BuildContext context) {
     final theme = Theme.of(context);

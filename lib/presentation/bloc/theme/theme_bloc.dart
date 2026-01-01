@@ -9,15 +9,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     on<SetLightThemeEvent>(_onSetLightTheme);
   }
 
-  void _onToggleTheme(ToggleThemeEvent event, Emitter<ThemeState> emit) {
-    emit(state.copyWith(isDarkMode: !state.isDarkMode));
-  }
+  void _onToggleTheme(ToggleThemeEvent event, Emitter<ThemeState> emit) =>
+      emit(state.copyWith(isDarkMode: !state.isDarkMode));
 
-  void _onSetDarkTheme(SetDarkThemeEvent event, Emitter<ThemeState> emit) {
-    emit(state.copyWith(isDarkMode: true));
-  }
+  void _onSetDarkTheme(SetDarkThemeEvent event, Emitter<ThemeState> emit) =>
+      emit(state.copyWith(isDarkMode: true));
 
-  void _onSetLightTheme(SetLightThemeEvent event, Emitter<ThemeState> emit) {
-    emit(state.copyWith(isDarkMode: false));
-  }
+  void _onSetLightTheme(SetLightThemeEvent event, Emitter<ThemeState> emit) =>
+      emit(state.copyWith(isDarkMode: false));
 }

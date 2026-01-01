@@ -60,26 +60,22 @@ class _ContactSectionState extends State<ContactSection> {
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(flex: 1, child: _buildContactInfo(context)),
-        const SizedBox(width: 48),
-        Expanded(flex: 1, child: _buildContactForm(context)),
-      ],
-    );
-  }
+  Widget _buildDesktopLayout(BuildContext context) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(flex: 1, child: _buildContactInfo(context)),
+          const SizedBox(width: 48),
+          Expanded(flex: 1, child: _buildContactForm(context)),
+        ],
+      );
 
-  Widget _buildMobileLayout(BuildContext context) {
-    return Column(
-      children: [
-        _buildContactInfo(context),
-        const SizedBox(height: 48),
-        _buildContactForm(context),
-      ],
-    );
-  }
+  Widget _buildMobileLayout(BuildContext context) => Column(
+        children: [
+          _buildContactInfo(context),
+          const SizedBox(height: 48),
+          _buildContactForm(context),
+        ],
+      );
 
   Widget _buildContactInfo(BuildContext context) {
     final theme = Theme.of(context);
@@ -201,9 +197,8 @@ class _ContactSectionState extends State<ContactSection> {
     );
   }
 
-  Widget _buildSocialButton(BuildContext context, IconData icon, String url) {
-    return _AnimatedSocialButton(icon: icon, url: url);
-  }
+  Widget _buildSocialButton(BuildContext context, IconData icon, String url) =>
+      _AnimatedSocialButton(icon: icon, url: url);
 
   Widget _buildContactForm(BuildContext context) {
     final theme = Theme.of(context);

@@ -26,18 +26,12 @@ class _ProjectCardState extends State<ProjectCard> {
 
   void _onEnter(BuildContext context) {
     setState(() => _isHovered = true);
-    if (kIsWeb) {
-      final provider = CursorScope.maybeOf(context);
-      provider?.setState(CursorState.hovering);
-    }
+    if (kIsWeb) CursorScope.maybeOf(context)?.setState(CursorState.hovering);
   }
 
   void _onExit(BuildContext context) {
     setState(() => _isHovered = false);
-    if (kIsWeb) {
-      final provider = CursorScope.maybeOf(context);
-      provider?.setState(CursorState.normal);
-    }
+    if (kIsWeb) CursorScope.maybeOf(context)?.setState(CursorState.normal);
   }
 
   @override
@@ -212,25 +206,17 @@ class _ProjectCardState extends State<ProjectCard> {
     );
   }
 
-  String _getCategoryLabel(ProjectCategory category) {
-    switch (category) {
-      case ProjectCategory.crm:
-        return 'CRM';
-      case ProjectCategory.pos:
-        return 'POS';
-      case ProjectCategory.assetManagement:
-        return 'Asset Management';
-      default:
-        return 'Project';
-    }
-  }
+  String _getCategoryLabel(ProjectCategory category) => switch (category) {
+        ProjectCategory.crm => 'CRM',
+        ProjectCategory.pos => 'POS',
+        ProjectCategory.assetManagement => 'Asset Management',
+        _ => 'Project',
+      };
 
-  void _showProjectDetails(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => _ProjectDetailsDialog(project: widget.project),
-    );
-  }
+  void _showProjectDetails(BuildContext context) => showDialog(
+        context: context,
+        builder: (context) => _ProjectDetailsDialog(project: widget.project),
+      );
 }
 
 class _PatternPainter extends CustomPainter {
