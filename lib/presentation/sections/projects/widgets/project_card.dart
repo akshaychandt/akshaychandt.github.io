@@ -6,6 +6,7 @@ import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/utils/responsive_helper.dart';
 import '../../../../data/models/project_model.dart';
 import '../../../widgets/cursor/cursor_provider.dart';
+import '../../../widgets/skeleton/skeleton_loader.dart';
 
 class ProjectCard extends StatefulWidget {
   final ProjectModel project;
@@ -183,20 +184,8 @@ class _ProjectCardState extends State<ProjectCard> {
             CachedNetworkImage(
               imageUrl: widget.project.imageUrl!,
               fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                decoration: const BoxDecoration(
-                  gradient: AppColors.primaryGradient,
-                ),
-                child: const Center(
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+              placeholder: (context, url) => const ShimmerEffect(
+                borderRadius: BorderRadius.zero,
               ),
               errorWidget: (context, url, error) => Container(
                 decoration: const BoxDecoration(
