@@ -43,6 +43,53 @@
   <meta name="theme-color" content="#6366F1">
   <meta name="msapplication-TileColor" content="#6366F1">
 
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://akshaychandt.github.io/">
+
+  <!-- Additional Open Graph -->
+  <meta property="og:site_name" content="Akshay Chand T Portfolio">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Akshay Chand T - Flutter Developer Portfolio">
+
+  <!-- Additional Twitter -->
+  <meta name="twitter:site" content="@akshaychandt">
+  <meta name="twitter:creator" content="@akshaychandt">
+  <meta name="twitter:image:alt" content="Akshay Chand T - Flutter Developer Portfolio">
+
+  <!-- JSON-LD Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Akshay Chand T",
+      "url": "https://akshaychandt.github.io/",
+      "image": "https://akshaychandt.github.io/og-image.png",
+      "jobTitle": "Senior Flutter Developer",
+      "description": "Senior Flutter Developer with 4+ years of experience building enterprise-grade mobile applications across Android, iOS, Windows, macOS, and Web platforms.",
+      "knowsAbout": [
+        "Flutter",
+        "Dart",
+        "Mobile Development",
+        "Cross-Platform Development",
+        "SAP Integration",
+        "Android Development",
+        "iOS Development",
+        "Web Development",
+        "Enterprise Applications",
+        "Offline-First Architecture"
+      ],
+      "sameAs": [
+        "https://github.com/AkshayChandT",
+        "https://linkedin.com/in/akshaychandt"
+      ]
+    }
+  }
+  </script>
+
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -59,6 +106,67 @@
   <!-- Preconnect to Google Fonts for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Preconnect to common CDNs for faster resource loading -->
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+
+  <!-- Preload critical Flutter assets -->
+  <link rel="preload" href="main.dart.js" as="script">
+  <link rel="preload" href="flutter_bootstrap.js" as="script">
+
+  <!-- Google Analytics 4 -->
+  <!-- Replace G-XXXXXXXXXX with your actual GA4 Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX', {
+      'anonymize_ip': true,
+      'cookie_flags': 'SameSite=None;Secure'
+    });
+
+    // Custom event tracking functions for Flutter interop
+    window.trackEvent = function(eventName, eventParams) {
+      gtag('event', eventName, eventParams);
+    };
+
+    window.trackPageView = function(pageName) {
+      gtag('event', 'page_view', {
+        page_title: pageName,
+        page_location: window.location.href
+      });
+    };
+
+    window.trackResumeDownload = function() {
+      gtag('event', 'file_download', {
+        file_name: 'resume',
+        file_extension: 'pdf',
+        link_text: 'Download Resume'
+      });
+    };
+
+    window.trackSocialClick = function(platform, url) {
+      gtag('event', 'social_click', {
+        social_platform: platform,
+        link_url: url
+      });
+    };
+
+    window.trackContactFormSubmit = function() {
+      gtag('event', 'generate_lead', {
+        event_category: 'contact',
+        event_label: 'contact_form_submit'
+      });
+    };
+
+    window.trackSectionView = function(sectionName) {
+      gtag('event', 'section_view', {
+        section_name: sectionName
+      });
+    };
+  </script>
 
   <style>
     /* Loading screen styles */
@@ -86,6 +194,54 @@
   <div class="loading">
     <div class="loading-spinner"></div>
   </div>
+
+  <!-- Performance timing for debugging -->
+  <script>
+    window.flutterLoadStart = performance.now();
+  </script>
+
+  <!-- Measure and report web vitals -->
+  <script>
+    // Report paint timing for performance monitoring
+    if ('PerformanceObserver' in window) {
+      try {
+        const paintObserver = new PerformanceObserver(function(list) {
+          for (const entry of list.getEntries()) {
+            if (entry.name === 'first-contentful-paint') {
+              console.log('FCP:', entry.startTime.toFixed(0), 'ms');
+              // Report to analytics
+              if (window.gtag) {
+                gtag('event', 'web_vitals', {
+                  event_category: 'Performance',
+                  event_label: 'FCP',
+                  value: Math.round(entry.startTime)
+                });
+              }
+            }
+          }
+        });
+        paintObserver.observe({ entryTypes: ['paint'] });
+
+        // Observe Largest Contentful Paint
+        const lcpObserver = new PerformanceObserver(function(list) {
+          const entries = list.getEntries();
+          const lastEntry = entries[entries.length - 1];
+          console.log('LCP:', lastEntry.startTime.toFixed(0), 'ms');
+          if (window.gtag) {
+            gtag('event', 'web_vitals', {
+              event_category: 'Performance',
+              event_label: 'LCP',
+              value: Math.round(lastEntry.startTime)
+            });
+          }
+        });
+        lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      } catch (e) {
+        // PerformanceObserver not fully supported
+      }
+    }
+  </script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
