@@ -7,6 +7,7 @@ import 'presentation/bloc/theme/theme_state.dart';
 import 'presentation/bloc/navigation/navigation_bloc.dart';
 import 'presentation/bloc/projects/projects_bloc.dart';
 import 'presentation/pages/home/home_page.dart';
+import 'presentation/widgets/cursor/custom_cursor.dart';
 
 class PortfolioApp extends StatelessWidget {
   const PortfolioApp({super.key});
@@ -33,7 +34,9 @@ class PortfolioApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            home: const HomePage(),
+            home: const CustomCursor(
+              child: HomePage(),
+            ),
           );
         },
       ),

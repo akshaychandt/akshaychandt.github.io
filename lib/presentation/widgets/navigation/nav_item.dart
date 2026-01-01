@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../cursor/cursor_provider.dart';
 
 class NavItem extends StatefulWidget {
   final String label;
@@ -19,14 +21,30 @@ class NavItem extends StatefulWidget {
 class _NavItemState extends State<NavItem> {
   bool _isHovered = false;
 
+  void _onEnter(BuildContext context) {
+    setState(() => _isHovered = true);
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.link);
+    }
+  }
+
+  void _onExit(BuildContext context) {
+    setState(() => _isHovered = false);
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.normal);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      cursor: SystemMouseCursors.click,
+      onEnter: (_) => _onEnter(context),
+      onExit: (_) => _onExit(context),
+      cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.click,
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedContainer(

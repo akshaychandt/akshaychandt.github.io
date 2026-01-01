@@ -1,56 +1,82 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../presentation/bloc/theme/theme_bloc.dart';
 import '../../../presentation/bloc/theme/theme_event.dart';
 import '../../../presentation/bloc/theme/theme_state.dart';
+import '../cursor/cursor_provider.dart';
 
-class ThemeToggle extends StatelessWidget {
+class ThemeToggle extends StatefulWidget {
   const ThemeToggle({super.key});
+
+  @override
+  State<ThemeToggle> createState() => _ThemeToggleState();
+}
+
+class _ThemeToggleState extends State<ThemeToggle> {
+  void _onEnter(BuildContext context) {
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.hovering);
+    }
+  }
+
+  void _onExit(BuildContext context) {
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.normal);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
-        return GestureDetector(
-          onTap: () {
-            context.read<ThemeBloc>().add(const ToggleThemeEvent());
-          },
-          child: Container(
-            width: 56,
-            height: 32,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: state.isDarkMode
-                  ? Theme.of(context).colorScheme.surface
-                  : Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
-                width: 1,
+        return MouseRegion(
+          onEnter: (_) => _onEnter(context),
+          onExit: (_) => _onExit(context),
+          cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              context.read<ThemeBloc>().add(const ToggleThemeEvent());
+            },
+            child: Container(
+              width: 56,
+              height: 32,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: state.isDarkMode
+                    ? Theme.of(context).colorScheme.surface
+                    : Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                  width: 1,
+                ),
               ),
-            ),
-            child: Stack(
-              children: [
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut,
-                  left: state.isDarkMode ? 4 : 28,
-                  top: 4,
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    child: Icon(
-                      state.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                      size: 14,
-                      color: Colors.white,
+              child: Stack(
+                children: [
+                  AnimatedPositioned(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    left: state.isDarkMode ? 4 : 28,
+                    top: 4,
+                    child: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      child: Icon(
+                        state.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                        size: 14,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ).animate().fadeIn(duration: 300.ms).scale(delay: 100.ms);

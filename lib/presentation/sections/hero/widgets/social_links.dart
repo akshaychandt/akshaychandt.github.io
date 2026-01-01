@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/url_launcher_helper.dart';
+import '../../../widgets/cursor/cursor_provider.dart';
 
 class SocialLinks extends StatelessWidget {
   final bool showLabels;
@@ -67,14 +69,30 @@ class _SocialButton extends StatefulWidget {
 class _SocialButtonState extends State<_SocialButton> {
   bool _isHovered = false;
 
+  void _onEnter(BuildContext context) {
+    setState(() => _isHovered = true);
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.link);
+    }
+  }
+
+  void _onExit(BuildContext context) {
+    setState(() => _isHovered = false);
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.normal);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      cursor: SystemMouseCursors.click,
+      onEnter: (_) => _onEnter(context),
+      onExit: (_) => _onExit(context),
+      cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () => UrlLauncherHelper.launchURL(widget.url),
         child: AnimatedContainer(

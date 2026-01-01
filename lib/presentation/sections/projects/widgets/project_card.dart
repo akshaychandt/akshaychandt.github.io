@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/utils/responsive_helper.dart';
 import '../../../../data/models/project_model.dart';
+import '../../../widgets/cursor/cursor_provider.dart';
 
 class ProjectCard extends StatefulWidget {
   final ProjectModel project;
@@ -22,14 +24,31 @@ class _ProjectCardState extends State<ProjectCard> {
   bool _isHovered = false;
   final bool _isExpanded = false;
 
+  void _onEnter(BuildContext context) {
+    setState(() => _isHovered = true);
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.hovering);
+    }
+  }
+
+  void _onExit(BuildContext context) {
+    setState(() => _isHovered = false);
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.normal);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isMobile = ResponsiveHelper.isMobile(context);
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      onEnter: (_) => _onEnter(context),
+      onExit: (_) => _onExit(context),
+      cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.basic,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(

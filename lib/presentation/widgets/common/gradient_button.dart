@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/responsive_helper.dart';
+import '../cursor/cursor_provider.dart';
 
 class GradientButton extends StatefulWidget {
   final String text;
@@ -25,14 +27,30 @@ class GradientButton extends StatefulWidget {
 class _GradientButtonState extends State<GradientButton> {
   bool _isHovered = false;
 
+  void _onEnter(BuildContext context) {
+    setState(() => _isHovered = true);
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.hovering);
+    }
+  }
+
+  void _onExit(BuildContext context) {
+    setState(() => _isHovered = false);
+    if (kIsWeb) {
+      final provider = CursorScope.maybeOf(context);
+      provider?.setState(CursorState.normal);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isMobile = ResponsiveHelper.isMobile(context);
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      cursor: SystemMouseCursors.click,
+      onEnter: (_) => _onEnter(context),
+      onExit: (_) => _onExit(context),
+      cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.click,
       child: GestureDetector(
         onTap: widget.onPressed,
         child: AnimatedContainer(
