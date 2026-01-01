@@ -94,7 +94,7 @@ class _SocialButtonState extends State<_SocialButton> {
       onExit: (_) => _onExit(context),
       cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () => UrlLauncherHelper.launchURL(widget.url),
+        onTap: () => UrlLauncherHelper.launchSocialLink(widget.label, widget.url),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           padding: EdgeInsets.all(widget.showLabel ? 12 : 14),

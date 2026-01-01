@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -72,45 +73,8 @@ class _ProjectCardState extends State<ProjectCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Project Header with gradient
-              Container(
-                height: 80,
-                decoration: BoxDecoration(
-                  gradient: AppColors.primaryGradient,
-                ),
-                child: Stack(
-                  children: [
-                    // Pattern overlay
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: _PatternPainter(),
-                      ),
-                    ),
-                    // Category badge
-                    Positioned(
-                      top: 12,
-                      left: 12,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          _getCategoryLabel(widget.project.category),
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Project Header with image or gradient
+              _buildProjectHeader(theme),
 
               // Content
               Expanded(
@@ -202,6 +166,91 @@ class _ProjectCardState extends State<ProjectCard> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildProjectHeader(ThemeData theme) {
+    final hasImage = widget.project.imageUrl != null && widget.project.imageUrl!.isNotEmpty;
+
+    return SizedBox(
+      height: 80,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background: Image or Gradient
+          if (hasImage)
+            CachedNetworkImage(
+              imageUrl: widget.project.imageUrl!,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Container(
+                decoration: const BoxDecoration(
+                  gradient: AppColors.primaryGradient,
+                ),
+                child: const Center(
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) => Container(
+                decoration: const BoxDecoration(
+                  gradient: AppColors.primaryGradient,
+                ),
+                child: CustomPaint(painter: _PatternPainter()),
+              ),
+            )
+          else
+            Container(
+              decoration: const BoxDecoration(
+                gradient: AppColors.primaryGradient,
+              ),
+              child: CustomPaint(painter: _PatternPainter()),
+            ),
+
+          // Dark overlay for better text readability when image is present
+          if (hasImage)
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.1),
+                    Colors.black.withValues(alpha: 0.4),
+                  ],
+                ),
+              ),
+            ),
+
+          // Category badge
+          Positioned(
+            top: 12,
+            left: 12,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 4,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                _getCategoryLabel(widget.project.category),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

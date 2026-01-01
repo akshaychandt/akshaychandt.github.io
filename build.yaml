@@ -1,0 +1,35 @@
+# Build configuration for Flutter web optimization
+# This file configures the Dart-to-JS compiler for better tree shaking
+# and optimized web builds.
+
+targets:
+  $default:
+    builders:
+      # Configure source generation for better tree shaking
+      build_web_compilers:entrypoint:
+        generate_for:
+          - web/**.dart
+          - lib/main.dart
+        options:
+          # Enable aggressive dead code elimination
+          dart2js_args:
+            - --minify
+            - --trust-primitives
+            - --trust-type-annotations
+            - -O4
+            # Omit implicit checks for better performance
+            - --omit-implicit-checks
+            # Enable fast startup
+            - --fast-startup
+
+      # Ensure proper source maps for debugging in development
+      build_web_compilers:sdk_js:
+        options:
+          sound_null_safety: true
+
+# Global options for all builders
+global_options:
+  # Enable sound null safety
+  build_web_compilers:entrypoint:
+    options:
+      compiler: dart2js

@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:url_launcher/url_launcher.dart';
+import '../services/analytics_service.dart';
 
 class UrlLauncherHelper {
+  static final _analytics = AnalyticsService.instance;
+
   static Future<void> launchURL(String url) async {
     // Handle relative asset paths for web
     String finalUrl = url;
@@ -41,6 +44,12 @@ class UrlLauncherHelper {
   }
 
   static Future<void> downloadResume(String resumeUrl) async {
+    _analytics.trackResumeDownload();
     await launchURL(resumeUrl);
+  }
+
+  static Future<void> launchSocialLink(String platform, String url) async {
+    _analytics.trackSocialClick(platform, url);
+    await launchURL(url);
   }
 }

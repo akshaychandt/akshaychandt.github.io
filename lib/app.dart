@@ -7,6 +7,7 @@ import 'presentation/bloc/theme/theme_state.dart';
 import 'presentation/bloc/navigation/navigation_bloc.dart';
 import 'presentation/bloc/projects/projects_bloc.dart';
 import 'presentation/pages/home/home_page.dart';
+import 'presentation/pages/splash/splash_screen.dart';
 import 'presentation/widgets/cursor/custom_cursor.dart';
 
 class PortfolioApp extends StatelessWidget {
@@ -35,11 +36,47 @@ class PortfolioApp extends StatelessWidget {
             darkTheme: AppTheme.darkTheme,
             themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             home: const CustomCursor(
-              child: HomePage(),
+              child: _SplashWrapper(),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class _SplashWrapper extends StatefulWidget {
+  const _SplashWrapper();
+
+  @override
+  State<_SplashWrapper> createState() => _SplashWrapperState();
+}
+
+class _SplashWrapperState extends State<_SplashWrapper> {
+  bool _showSplash = true;
+
+  void _onSplashComplete() {
+    setState(() => _showSplash = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 800),
+      switchInCurve: Curves.easeInOut,
+      switchOutCurve: Curves.easeInOut,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+      child: _showSplash
+          ? SplashScreen(
+              key: const ValueKey('splash'),
+              onComplete: _onSplashComplete,
+            )
+          : const HomePage(key: ValueKey('home')),
     );
   }
 }
