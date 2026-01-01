@@ -8,7 +8,9 @@ import '../../../core/services/email_service.dart';
 import '../../../core/utils/responsive_helper.dart';
 import '../../../core/utils/url_launcher_helper.dart';
 import '../../widgets/common/section_title.dart';
-import '../../widgets/common/gradient_button.dart';
+import '../../widgets/interactions/animated_text_field.dart';
+import '../../widgets/interactions/animated_button.dart';
+import '../../widgets/interactions/micro_interactions.dart';
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -23,6 +25,8 @@ class _ContactSectionState extends State<ContactSection> {
   final _emailController = TextEditingController();
   final _messageController = TextEditingController();
   bool _isLoading = false;
+  bool _isSuccess = false;
+  bool _isError = false;
 
   @override
   void dispose() {
@@ -162,12 +166,14 @@ class _ContactSectionState extends State<ContactSection> {
   ) {
     final theme = Theme.of(context);
 
-    return MouseRegion(
-      cursor: onTap != null
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.basic,
-      child: GestureDetector(
-        onTap: onTap,
+    return TapScale(
+      onTap: onTap,
+      scaleDown: onTap != null ? 0.97 : 1.0,
+      enableHaptic: onTap != null,
+      child: MouseRegion(
+        cursor: onTap != null
+            ? SystemMouseCursors.click
+            : SystemMouseCursors.basic,
         child: Row(
           children: [
             Container(
@@ -222,12 +228,12 @@ class _ContactSectionState extends State<ContactSection> {
               ),
             ),
             const SizedBox(height: 24),
-            TextFormField(
+            AnimatedTextField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                hintText: AppStrings.contactFormName,
-                prefixIcon: Icon(Icons.person_outline),
-              ),
+              hintText: AppStrings.contactFormName,
+              labelText: 'Your Name',
+              prefixIcon: Icons.person_outline,
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your name';
@@ -235,13 +241,14 @@ class _ContactSectionState extends State<ContactSection> {
                 return null;
               },
             ),
-            const SizedBox(height: 16),
-            TextFormField(
+            const SizedBox(height: 20),
+            AnimatedTextField(
               controller: _emailController,
-              decoration: const InputDecoration(
-                hintText: AppStrings.contactFormEmail,
-                prefixIcon: Icon(Icons.email_outlined),
-              ),
+              hintText: AppStrings.contactFormEmail,
+              labelText: 'Email Address',
+              prefixIcon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
@@ -252,14 +259,14 @@ class _ContactSectionState extends State<ContactSection> {
                 return null;
               },
             ),
-            const SizedBox(height: 16),
-            TextFormField(
+            const SizedBox(height: 20),
+            AnimatedTextField(
               controller: _messageController,
-              decoration: const InputDecoration(
-                hintText: AppStrings.contactFormMessage,
-                prefixIcon: Icon(Icons.message_outlined),
-              ),
+              hintText: AppStrings.contactFormMessage,
+              labelText: 'Your Message',
+              prefixIcon: Icons.message_outlined,
               maxLines: 5,
+              textInputAction: TextInputAction.newline,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your message';
@@ -267,18 +274,17 @@ class _ContactSectionState extends State<ContactSection> {
                 return null;
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
             SizedBox(
               width: double.infinity,
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : GradientButton(
-                      text: AppStrings.contactFormSubmit,
-                      icon: Icons.send,
-                      onPressed: _submitForm,
-                    ),
+              child: AnimatedButton(
+                text: AppStrings.contactFormSubmit,
+                icon: Icons.send,
+                isLoading: _isLoading,
+                isSuccess: _isSuccess,
+                isError: _isError,
+                onPressed: _submitForm,
+              ),
             ),
           ],
         ),
@@ -288,7 +294,11 @@ class _ContactSectionState extends State<ContactSection> {
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
+      setState(() {
+        _isLoading = true;
+        _isSuccess = false;
+        _isError = false;
+      });
 
       final result = await EmailService.sendEmail(
         name: _nameController.text,
@@ -296,29 +306,53 @@ class _ContactSectionState extends State<ContactSection> {
         message: _messageController.text,
       );
 
-      setState(() => _isLoading = false);
-
       if (!mounted) return;
 
+      setState(() => _isLoading = false);
+
       if (result.isSuccess) {
-        // Clear form
-        _nameController.clear();
-        _emailController.clear();
-        _messageController.clear();
+        setState(() => _isSuccess = true);
+
+        // Clear form after showing success
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          if (mounted) {
+            _nameController.clear();
+            _emailController.clear();
+            _messageController.clear();
+            setState(() => _isSuccess = false);
+          }
+        });
 
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text(AppStrings.contactFormSuccess),
             backgroundColor: Theme.of(context).colorScheme.primary,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
         );
       } else {
+        setState(() => _isError = true);
+
+        // Reset error state after delay
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          if (mounted) {
+            setState(() => _isError = false);
+          }
+        });
+
         // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(result.errorMessage ?? 'Failed to send message'),
             backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
         );
       }
@@ -339,16 +373,22 @@ class _AnimatedSocialButton extends StatefulWidget {
 class _AnimatedSocialButtonState extends State<_AnimatedSocialButton> {
   bool _isHovered = false;
 
+  void _onTap() {
+    HapticFeedbackHelper.lightTap();
+    UrlLauncherHelper.launchURL(widget.url);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => UrlLauncherHelper.launchURL(widget.url),
+    return TapScale(
+      onTap: _onTap,
+      scaleDown: 0.9,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        cursor: SystemMouseCursors.click,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.all(14),
@@ -363,6 +403,15 @@ class _AnimatedSocialButtonState extends State<_AnimatedSocialButton> {
                   : theme.dividerColor,
               width: 1,
             ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
           ),
           transform: _isHovered
               ? (Matrix4.identity()..setTranslationRaw(0.0, -4.0, 0.0))
