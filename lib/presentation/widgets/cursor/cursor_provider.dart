@@ -62,9 +62,8 @@ class CursorProvider extends ChangeNotifier {
   }
 
   /// Lerp the actual position towards target (called per frame)
-  void lerpPosition(double t) {
-    _position = Offset.lerp(_position, _targetPosition, t) ?? _targetPosition;
-  }
+  void lerpPosition(double t) =>
+      _position = Offset.lerp(_position, _targetPosition, t) ?? _targetPosition;
 
   /// Set cursor state
   void setState(CursorState newState) {
@@ -124,8 +123,6 @@ class CursorScope extends InheritedNotifier<CursorProvider> {
     return scope!.notifier!;
   }
 
-  static CursorProvider? maybeOf(BuildContext context) {
-    final scope = context.dependOnInheritedWidgetOfExactType<CursorScope>();
-    return scope?.notifier;
-  }
+  static CursorProvider? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<CursorScope>()?.notifier;
 }

@@ -19,14 +19,13 @@ class ProjectsState extends Equatable {
     List<ProjectModel>? filteredProjects,
     ProjectCategory? selectedCategory,
     bool? isLoading,
-  }) {
-    return ProjectsState(
-      allProjects: allProjects ?? this.allProjects,
-      filteredProjects: filteredProjects ?? this.filteredProjects,
-      selectedCategory: selectedCategory ?? this.selectedCategory,
-      isLoading: isLoading ?? this.isLoading,
-    );
-  }
+  }) =>
+      ProjectsState(
+        allProjects: allProjects ?? this.allProjects,
+        filteredProjects: filteredProjects ?? this.filteredProjects,
+        selectedCategory: selectedCategory ?? this.selectedCategory,
+        isLoading: isLoading ?? this.isLoading,
+      );
 
   @override
   List<Object?> get props => [

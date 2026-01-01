@@ -12,12 +12,11 @@ class NavigationState extends Equatable {
   NavigationState copyWith({
     int? currentSection,
     bool? isScrolling,
-  }) {
-    return NavigationState(
-      currentSection: currentSection ?? this.currentSection,
-      isScrolling: isScrolling ?? this.isScrolling,
-    );
-  }
+  }) =>
+      NavigationState(
+        currentSection: currentSection ?? this.currentSection,
+        isScrolling: isScrolling ?? this.isScrolling,
+      );
 
   @override
   List<Object?> get props => [currentSection, isScrolling];

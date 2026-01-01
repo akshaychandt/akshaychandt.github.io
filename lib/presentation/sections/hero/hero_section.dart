@@ -62,28 +62,24 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(flex: 3, child: _buildHeroContent(context)),
-        const SizedBox(width: 48),
-        Expanded(flex: 2, child: _buildProfileImage(context)),
-      ],
-    );
-  }
+  Widget _buildDesktopLayout(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(flex: 3, child: _buildHeroContent(context)),
+          const SizedBox(width: 48),
+          Expanded(flex: 2, child: _buildProfileImage(context)),
+        ],
+      );
 
-  Widget _buildMobileLayout(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _buildProfileImage(context, size: 120),
-        const SizedBox(height: 16),
-        _buildHeroContent(context, centerAlign: true),
-      ],
-    );
-  }
+  Widget _buildMobileLayout(BuildContext context) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildProfileImage(context, size: 120),
+          const SizedBox(height: 16),
+          _buildHeroContent(context, centerAlign: true),
+        ],
+      );
 
   Widget _buildHeroContent(BuildContext context, {bool centerAlign = false}) {
     final theme = Theme.of(context);
@@ -132,12 +128,9 @@ class HeroSection extends StatelessWidget {
             textAlign: centerAlign ? TextAlign.center : TextAlign.start,
             child: AnimatedTextKit(
               repeatForever: true,
-              animatedTexts: AppStrings.animatedRoles.map((role) {
-                return TypewriterAnimatedText(
-                  role,
-                  speed: const Duration(milliseconds: 100),
-                );
-              }).toList(),
+              animatedTexts: AppStrings.animatedRoles
+                  .map((role) => TypewriterAnimatedText(role, speed: const Duration(milliseconds: 100)))
+                  .toList(),
             ),
           ),
         ).animate().fadeIn(delay: 400.ms, duration: 500.ms),

@@ -8,24 +8,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<UpdateCurrentSectionEvent>(_onUpdateCurrentSection);
   }
 
-  void _onNavigateToSection(
-    NavigateToSectionEvent event,
-    Emitter<NavigationState> emit,
-  ) {
-    emit(state.copyWith(
-      currentSection: event.sectionIndex,
-      isScrolling: true,
-    ));
-  }
+  void _onNavigateToSection(NavigateToSectionEvent event, Emitter<NavigationState> emit) =>
+      emit(state.copyWith(currentSection: event.sectionIndex, isScrolling: true));
 
-  void _onUpdateCurrentSection(
-    UpdateCurrentSectionEvent event,
-    Emitter<NavigationState> emit,
-  ) {
-    if (!state.isScrolling) {
-      emit(state.copyWith(currentSection: event.sectionIndex));
-    } else {
-      emit(state.copyWith(isScrolling: false));
-    }
-  }
+  void _onUpdateCurrentSection(UpdateCurrentSectionEvent event, Emitter<NavigationState> emit) =>
+      emit(state.copyWith(
+        currentSection: state.isScrolling ? state.currentSection : event.sectionIndex,
+        isScrolling: false,
+      ));
 }

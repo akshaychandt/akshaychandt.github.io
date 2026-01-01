@@ -5,11 +5,8 @@ class ThemeState extends Equatable {
 
   const ThemeState({this.isDarkMode = true});
 
-  ThemeState copyWith({bool? isDarkMode}) {
-    return ThemeState(
-      isDarkMode: isDarkMode ?? this.isDarkMode,
-    );
-  }
+  ThemeState copyWith({bool? isDarkMode}) =>
+      ThemeState(isDarkMode: isDarkMode ?? this.isDarkMode);
 
   @override
   List<Object?> get props => [isDarkMode];

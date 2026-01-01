@@ -29,18 +29,12 @@ class _GradientButtonState extends State<GradientButton> {
 
   void _onEnter(BuildContext context) {
     setState(() => _isHovered = true);
-    if (kIsWeb) {
-      final provider = CursorScope.maybeOf(context);
-      provider?.setState(CursorState.hovering);
-    }
+    if (kIsWeb) CursorScope.maybeOf(context)?.setState(CursorState.hovering);
   }
 
   void _onExit(BuildContext context) {
     setState(() => _isHovered = false);
-    if (kIsWeb) {
-      final provider = CursorScope.maybeOf(context);
-      provider?.setState(CursorState.normal);
-    }
+    if (kIsWeb) CursorScope.maybeOf(context)?.setState(CursorState.normal);
   }
 
   @override
