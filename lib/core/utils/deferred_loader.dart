@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import '../../presentation/widgets/skeleton/skeleton_loader.dart';
 
 /// A widget that defers loading of its child until it becomes visible.
 /// This is particularly useful for web optimization to reduce initial bundle size
@@ -103,21 +104,14 @@ class _DeferredLoaderState extends State<DeferredLoader> {
   Widget _buildDefaultPlaceholder() {
     return SizedBox(
       height: widget.placeholderHeight ?? 400,
-      child: const Center(
-        child: SizedBox(
-          width: 32,
-          height: 32,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-          ),
-        ),
-      ),
+      width: double.infinity,
+      child: const ShimmerEffect(),
     );
   }
 }
 
 /// A lightweight placeholder for deferred sections
-/// that maintains layout while content loads
+/// that maintains layout while content loads with skeleton animation
 class SectionPlaceholder extends StatelessWidget {
   final double height;
   final String? label;
@@ -140,30 +134,48 @@ class SectionPlaceholder extends StatelessWidget {
             ? Colors.grey.shade900.withValues(alpha: 0.3)
             : Colors.grey.shade100.withValues(alpha: 0.3),
       ),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: isDark ? Colors.white54 : Colors.black38,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Title skeleton
+          const SkeletonLine(width: 200, height: 28),
+          const SizedBox(height: 12),
+          // Subtitle skeleton
+          const SkeletonLine(width: 280, height: 16),
+          const SizedBox(height: 40),
+          // Content skeleton rows
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    3,
+                    (index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: SkeletonBox(
+                        width: 120,
+                        height: 100,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (label != null) ...[
+            const SizedBox(height: 24),
+            Text(
+              label!,
+              style: TextStyle(
+                color: isDark ? Colors.white38 : Colors.black26,
+                fontSize: 12,
               ),
             ),
-            if (label != null) ...[
-              const SizedBox(height: 12),
-              Text(
-                label!,
-                style: TextStyle(
-                  color: isDark ? Colors.white38 : Colors.black26,
-                  fontSize: 12,
-                ),
-              ),
-            ],
           ],
-        ),
+        ],
       ),
     );
   }

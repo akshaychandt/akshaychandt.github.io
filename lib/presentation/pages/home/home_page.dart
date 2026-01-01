@@ -19,6 +19,7 @@ import '../../widgets/common/back_to_top_button.dart';
 import '../../widgets/navigation/keyboard_navigation.dart';
 import '../../widgets/navigation/navbar.dart';
 import '../../widgets/footer/footer.dart';
+import '../../widgets/skeleton/skeleton_loader.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -122,40 +123,28 @@ class _HomePageState extends State<HomePage> {
                   DeferredLoader(
                     detectorKey: 'skills_section',
                     placeholderHeight: 600,
-                    placeholder: const SectionPlaceholder(
-                      height: 600,
-                      label: 'Loading Skills...',
-                    ),
+                    placeholder: const SkillsSectionSkeleton(height: 600),
                     child: SkillsSection(key: _sectionKeys[2]),
                   ),
                   // Experience section - deferred on web
                   DeferredLoader(
                     detectorKey: 'experience_section',
                     placeholderHeight: 800,
-                    placeholder: const SectionPlaceholder(
-                      height: 800,
-                      label: 'Loading Experience...',
-                    ),
+                    placeholder: const ExperienceSectionSkeleton(height: 800),
                     child: ExperienceSection(key: _sectionKeys[3]),
                   ),
                   // Projects section - deferred on web
                   DeferredLoader(
                     detectorKey: 'projects_section',
                     placeholderHeight: 700,
-                    placeholder: const SectionPlaceholder(
-                      height: 700,
-                      label: 'Loading Projects...',
-                    ),
+                    placeholder: const ProjectsSectionSkeleton(height: 700),
                     child: ProjectsSection(key: _sectionKeys[4]),
                   ),
                   // Contact section - deferred on web
                   DeferredLoader(
                     detectorKey: 'contact_section',
                     placeholderHeight: 500,
-                    placeholder: const SectionPlaceholder(
-                      height: 500,
-                      label: 'Loading Contact...',
-                    ),
+                    placeholder: const ContactSectionSkeletonWrapper(height: 500),
                     child: ContactSection(key: _sectionKeys[5]),
                   ),
                   const Footer(),
