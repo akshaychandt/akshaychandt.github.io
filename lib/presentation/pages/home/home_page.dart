@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/utils/deferred_loader.dart';
 import '../../../core/utils/responsive_helper.dart';
 import '../../../core/utils/url_launcher_helper.dart';
 import '../../bloc/navigation/navigation_bloc.dart';
@@ -14,6 +15,8 @@ import '../../sections/skills/skills_section.dart';
 import '../../sections/experience/experience_section.dart';
 import '../../sections/projects/projects_section.dart';
 import '../../sections/contact/contact_section.dart';
+import '../../widgets/common/back_to_top_button.dart';
+import '../../widgets/navigation/keyboard_navigation.dart';
 import '../../widgets/navigation/navbar.dart';
 import '../../widgets/footer/footer.dart';
 
@@ -87,51 +90,94 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _downloadResume() {
-    // Open the resume URL - you can replace this with your actual resume link
-    UrlLauncherHelper.launchURL(AppStrings.resumeUrl);
+    UrlLauncherHelper.downloadResume(AppStrings.resumeUrl);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Scrollable Content
-          SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: ResponsiveHelper.isMobile(context)
-                      ? AppDimensions.navbarMobileHeight
-                      : AppDimensions.navbarHeight,
-                ),
-                HeroSection(
-                  key: _sectionKeys[0],
-                  onViewWorkPressed: () => _scrollToSection(4), // Projects section
-                  onDownloadResumePressed: _downloadResume,
-                ),
-                AboutSection(key: _sectionKeys[1]),
-                SkillsSection(key: _sectionKeys[2]),
-                ExperienceSection(key: _sectionKeys[3]),
-                ProjectsSection(key: _sectionKeys[4]),
-                ContactSection(key: _sectionKeys[5]),
-                const Footer(),
-              ],
+    return KeyboardNavigationHandler(
+      sectionCount: _sectionKeys.length,
+      onNavigateToSection: _scrollToSection,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            // Scrollable Content
+            SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: ResponsiveHelper.isMobile(context)
+                        ? AppDimensions.navbarMobileHeight
+                        : AppDimensions.navbarHeight,
+                  ),
+                  // Hero and About load immediately (above the fold)
+                  HeroSection(
+                    key: _sectionKeys[0],
+                    onViewWorkPressed: () => _scrollToSection(4), // Projects section
+                    onDownloadResumePressed: _downloadResume,
+                  ),
+                  AboutSection(key: _sectionKeys[1]),
+                  // Skills section - deferred on web
+                  DeferredLoader(
+                    detectorKey: 'skills_section',
+                    placeholderHeight: 600,
+                    placeholder: const SectionPlaceholder(
+                      height: 600,
+                      label: 'Loading Skills...',
+                    ),
+                    child: SkillsSection(key: _sectionKeys[2]),
+                  ),
+                  // Experience section - deferred on web
+                  DeferredLoader(
+                    detectorKey: 'experience_section',
+                    placeholderHeight: 800,
+                    placeholder: const SectionPlaceholder(
+                      height: 800,
+                      label: 'Loading Experience...',
+                    ),
+                    child: ExperienceSection(key: _sectionKeys[3]),
+                  ),
+                  // Projects section - deferred on web
+                  DeferredLoader(
+                    detectorKey: 'projects_section',
+                    placeholderHeight: 700,
+                    placeholder: const SectionPlaceholder(
+                      height: 700,
+                      label: 'Loading Projects...',
+                    ),
+                    child: ProjectsSection(key: _sectionKeys[4]),
+                  ),
+                  // Contact section - deferred on web
+                  DeferredLoader(
+                    detectorKey: 'contact_section',
+                    placeholderHeight: 500,
+                    placeholder: const SectionPlaceholder(
+                      height: 500,
+                      label: 'Loading Contact...',
+                    ),
+                    child: ContactSection(key: _sectionKeys[5]),
+                  ),
+                  const Footer(),
+                ],
+              ),
             ),
-          ),
 
-          // Fixed Navbar
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Navbar(
-              scrollController: _scrollController,
-              sectionKeys: _sectionKeys,
+            // Fixed Navbar
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Navbar(
+                scrollController: _scrollController,
+                sectionKeys: _sectionKeys,
+              ),
             ),
-          ),
-        ],
+
+            // Back to Top Button
+            BackToTopButton(scrollController: _scrollController),
+          ],
+        ),
       ),
     );
   }

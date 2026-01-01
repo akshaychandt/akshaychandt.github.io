@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/responsive_helper.dart';
+import '../../widgets/common/cached_image.dart';
 import '../../widgets/common/gradient_button.dart';
 import 'widgets/particle_background.dart';
 import 'widgets/social_links.dart';
@@ -245,17 +246,10 @@ class HeroSection extends StatelessWidget {
                   },
                 );
               },
-              child: Container(
+              child: CachedAvatar(
                 key: ValueKey<String>(profileImage),
-                width: imageSize - 16,
-                height: imageSize - 16,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage(profileImage),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                assetPath: profileImage,
+                size: imageSize - 16,
               ),
             ),
           ),

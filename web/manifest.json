@@ -1,13 +1,14 @@
 {
-    "name": "portfolio",
-    "short_name": "portfolio",
+    "name": "Akshay Chand T - Flutter Developer Portfolio",
+    "short_name": "Akshay Chand T",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0A0A0F",
+    "theme_color": "#6366F1",
+    "description": "Senior Flutter Developer with 4+ years of experience building enterprise-grade mobile applications across Android, iOS, Windows, macOS, and Web platforms.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "categories": ["portfolio", "business", "developer"],
     "icons": [
         {
             "src": "icons/Icon-192.png",
