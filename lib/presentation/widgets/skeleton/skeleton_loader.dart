@@ -615,8 +615,12 @@ class ContactSectionSkeletonWrapper extends StatelessWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: ResponsiveHelper.contentMaxWidth(context),
+            maxHeight: height - 48, // Account for padding
           ),
-          child: const ContactSectionSkeleton(),
+          child: const SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            child: ContactSectionSkeleton(),
+          ),
         ),
       ),
     );

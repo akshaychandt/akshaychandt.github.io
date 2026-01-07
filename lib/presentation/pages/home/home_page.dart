@@ -74,18 +74,26 @@ class _HomePageState extends State<HomePage> {
       final key = _sectionKeys[index];
       final keyContext = key.currentContext;
       if (keyContext != null) {
-        final renderBox = keyContext.findRenderObject() as RenderBox?;
-        if (renderBox != null) {
-          final offset = renderBox.localToGlobal(Offset.zero).dy;
-          final currentScroll = _scrollController.offset;
-          final targetScroll = currentScroll + offset - AppDimensions.navbarHeight;
-
-          _scrollController.animateTo(
-            targetScroll,
-            duration: const Duration(milliseconds: 800),
-            curve: Curves.easeInOutCubic,
-          );
-        }
+        // Capture navbar offset before async gap
+        final navbarOffset = ResponsiveHelper.isMobile(context)
+            ? AppDimensions.navbarMobileHeight
+            : AppDimensions.navbarHeight;
+        Scrollable.ensureVisible(
+          keyContext,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOutCubic,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+        ).then((_) {
+          if (!mounted) return;
+          // Adjust for navbar after scroll completes
+          if (_scrollController.offset > navbarOffset) {
+            _scrollController.animateTo(
+              _scrollController.offset - navbarOffset,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+            );
+          }
+        });
       }
     }
   }
