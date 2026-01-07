@@ -121,31 +121,35 @@ class _HomePageState extends State<HomePage> {
                   AboutSection(key: _sectionKeys[1]),
                   // Skills section - deferred on web
                   DeferredLoader(
+                    key: _sectionKeys[2],
                     detectorKey: 'skills_section',
                     placeholderHeight: 600,
                     placeholder: const SkillsSectionSkeleton(height: 600),
-                    child: SkillsSection(key: _sectionKeys[2]),
+                    child: const SkillsSection(),
                   ),
                   // Experience section - deferred on web
                   DeferredLoader(
+                    key: _sectionKeys[3],
                     detectorKey: 'experience_section',
                     placeholderHeight: 800,
                     placeholder: const ExperienceSectionSkeleton(height: 800),
-                    child: ExperienceSection(key: _sectionKeys[3]),
+                    child: const ExperienceSection(),
                   ),
                   // Projects section - deferred on web
                   DeferredLoader(
+                    key: _sectionKeys[4],
                     detectorKey: 'projects_section',
                     placeholderHeight: 700,
                     placeholder: const ProjectsSectionSkeleton(height: 700),
-                    child: ProjectsSection(key: _sectionKeys[4]),
+                    child: const ProjectsSection(),
                   ),
                   // Contact section - deferred on web
                   DeferredLoader(
+                    key: _sectionKeys[5],
                     detectorKey: 'contact_section',
                     placeholderHeight: 500,
                     placeholder: const ContactSectionSkeletonWrapper(height: 500),
-                    child: ContactSection(key: _sectionKeys[5]),
+                    child: const ContactSection(),
                   ),
                   const Footer(),
                 ],
