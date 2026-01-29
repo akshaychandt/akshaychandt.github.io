@@ -43,11 +43,9 @@ class AppStrings {
   // About Section
   static const String aboutTitle = 'About Me';
   static const String aboutDescription = '''
-I'm a passionate Flutter Developer specializing in building enterprise-grade mobile applications that solve real business problems. With expertise in offline-capable architecture, SAP integration, and the Stacked MVVM framework, I've successfully delivered 20+ production applications across CRM, field service, POS, and asset management domains.
+Hey there! I'm a Flutter Developer who loves turning complex business challenges into elegant mobile solutions. Over the past 4+ years, I've shipped 20+ apps across CRM, POS, and asset management—from offline-first architectures to seamless SAP integrations.
 
-My journey in mobile development has equipped me with deep knowledge of cross-platform development, state management patterns, and performance optimization. I take pride in writing clean, maintainable code and mentoring fellow developers to achieve their best work.
-
-When I'm not coding, you'll find me exploring new technologies, contributing to open-source projects, and sharing knowledge with the developer community.
+I believe in writing clean code that makes sense, and I genuinely enjoy helping other developers grow. When I'm not building apps, you'll catch me tinkering with new tech or sharing what I've learned with the community.
 ''';
 
   // Stats
