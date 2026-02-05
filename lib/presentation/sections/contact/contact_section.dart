@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/services/email_service.dart';
+import '../../../core/services/contact_service.dart';
 import '../../../core/utils/responsive_helper.dart';
 import '../../../core/utils/url_launcher_helper.dart';
 import '../../widgets/common/section_title.dart';
@@ -300,7 +300,7 @@ class _ContactSectionState extends State<ContactSection> {
         _isError = false;
       });
 
-      final result = await EmailService.sendEmail(
+      final result = await ContactService.submitMessage(
         name: _nameController.text,
         email: _emailController.text,
         message: _messageController.text,

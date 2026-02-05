@@ -32,13 +32,12 @@ dependencies:
   # Image Caching
   cached_network_image: ^3.3.1
 
-  # Email Service
-  emailjs: ^4.0.0
-  http: ^1.2.0
+  # Firebase
+  firebase_core: ^4.3.0
+  cloud_firestore: ^6.1.1
 
   # Icons
   cupertino_icons: ^1.0.8
-  firebase_core: ^4.3.0
 
 dev_dependencies:
   flutter_test:

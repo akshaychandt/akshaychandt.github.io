@@ -42,6 +42,10 @@ class _KeyboardNavigationHandlerState extends State<KeyboardNavigationHandler> {
   void _handleKeyEvent(KeyEvent event) {
     if (event is! KeyDownEvent) return;
 
+    // Don't handle navigation keys while a text field has focus
+    final primaryFocus = FocusManager.instance.primaryFocus;
+    if (primaryFocus != null && primaryFocus != _focusNode) return;
+
     final currentSection =
         context.read<NavigationBloc>().state.currentSection;
 

@@ -241,6 +241,7 @@ class _AnimatedTextFieldState extends State<AnimatedTextField>
               keyboardType: widget.keyboardType,
               textInputAction: widget.textInputAction,
               autofocus: widget.autofocus,
+              autofillHints: const [],
               validator: _handleValidation,
               onChanged: _onTextChanged,
               onFieldSubmitted: widget.onFieldSubmitted,

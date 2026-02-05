@@ -314,7 +314,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
         return Transform.scale(
           scale: 0.8 + (_successAnimation.value * 0.2),
           child: Opacity(
-            opacity: _successAnimation.value,
+            opacity: _successAnimation.value.clamp(0.0, 1.0),
             child: child,
           ),
         );
