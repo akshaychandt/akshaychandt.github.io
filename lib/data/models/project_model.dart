@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum ProjectCategory { all, crm, pos, assetManagement, other }
+enum ProjectCategory { all, crm, pos, assetManagement, openSource, other }
 
 class ProjectModel extends Equatable {
   final String id;

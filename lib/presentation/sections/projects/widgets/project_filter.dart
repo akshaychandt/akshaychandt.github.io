@@ -42,6 +42,12 @@ class ProjectFilter extends StatelessWidget {
             isSelected: selectedCategory == ProjectCategory.assetManagement,
             onTap: () => onCategorySelected(ProjectCategory.assetManagement),
           ),
+          const SizedBox(width: 12),
+          _FilterChip(
+            label: AppStrings.projectsFilterOpenSource,
+            isSelected: selectedCategory == ProjectCategory.openSource,
+            onTap: () => onCategorySelected(ProjectCategory.openSource),
+          ),
         ],
       ),
     );

@@ -212,6 +212,32 @@ class ResumeData {
       ],
       category: ProjectCategory.assetManagement,
     ),
+    ProjectModel(
+      id: '4',
+      title: 'Inline Logger',
+      subtitle: 'Published Flutter Package on pub.dev',
+      description:
+          'A powerful logging utility that enables developers to log any value inline without disrupting code flow. Supports chainable logging directly within expressions, method chains, and widget trees with zero impact in release mode.',
+      features: [
+        'Chainable inline logging that integrates directly into expressions and method chains',
+        'Multiple log levels — Debug, Verbose, Info, Success, Warning, Error, and Critical',
+        'Color-coded console output with ANSI colors and configurable emoji indicators',
+        'Zero release-mode impact — logging is automatically disabled in production builds',
+        'Log history storage for crash reporting and post-mortem debugging',
+        'Stack trace support for capturing error context',
+        'Highly configurable — toggle timestamps, emojis, colors, and minimum log levels',
+      ],
+      techStack: [
+        'Flutter',
+        'Dart',
+        'ANSI Colors',
+        'Extension Methods',
+        'pub.dev',
+      ],
+      category: ProjectCategory.openSource,
+      liveUrl: 'https://pub.dev/packages/inline_logger',
+      githubUrl: 'https://github.com/akshaychandt/inline_logger',
+    ),
   ];
 
   // Testimonials Data (Placeholder - can be updated with real testimonials)

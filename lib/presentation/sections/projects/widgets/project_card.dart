@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/utils/responsive_helper.dart';
+import '../../../../core/utils/url_launcher_helper.dart';
 import '../../../../data/models/project_model.dart';
 import '../../../widgets/cursor/cursor_provider.dart';
 import '../../../widgets/skeleton/skeleton_loader.dart';
@@ -248,6 +249,7 @@ class _ProjectCardState extends State<ProjectCard> {
         ProjectCategory.crm => 'CRM',
         ProjectCategory.pos => 'POS',
         ProjectCategory.assetManagement => 'Asset Management',
+        ProjectCategory.openSource => 'Open Source',
         _ => 'Project',
       };
 
@@ -389,6 +391,45 @@ class _ProjectDetailsDialog extends StatelessWidget {
                   );
                 }).toList(),
               ),
+              if (project.liveUrl != null || project.githubUrl != null) ...[
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    if (project.liveUrl != null)
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => UrlLauncherHelper.launchURL(project.liveUrl!),
+                          icon: const Icon(Icons.open_in_new, size: 16),
+                          label: const Text('View on pub.dev'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: theme.colorScheme.primary,
+                            side: BorderSide(color: theme.colorScheme.primary),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (project.liveUrl != null && project.githubUrl != null)
+                      const SizedBox(width: 12),
+                    if (project.githubUrl != null)
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => UrlLauncherHelper.launchURL(project.githubUrl!),
+                          icon: const Icon(Icons.code, size: 16),
+                          label: const Text('GitHub'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: theme.colorScheme.primary,
+                            side: BorderSide(color: theme.colorScheme.primary),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),
