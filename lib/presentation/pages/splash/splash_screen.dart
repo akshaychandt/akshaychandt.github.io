@@ -16,7 +16,6 @@ class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _particleController;
   late AnimationController _logoController;
-  late AnimationController _progressController;
   late List<Particle> _particles;
   bool _showContent = false;
 
@@ -36,11 +35,6 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 800),
     );
 
-    _progressController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-
     _startAnimation();
   }
 
@@ -51,12 +45,7 @@ class _SplashScreenState extends State<SplashScreen>
       _logoController.forward();
     }
 
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (mounted) {
-      _progressController.forward();
-    }
-
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(const Duration(milliseconds: 1500));
     if (mounted) {
       widget.onComplete();
     }
@@ -66,7 +55,6 @@ class _SplashScreenState extends State<SplashScreen>
   void dispose() {
     _particleController.dispose();
     _logoController.dispose();
-    _progressController.dispose();
     super.dispose();
   }
 
@@ -171,10 +159,6 @@ class _SplashScreenState extends State<SplashScreen>
                             curve: Curves.easeOutCubic,
                           ),
 
-                      const SizedBox(height: 48),
-
-                      // Loading indicator
-                      _buildLoadingIndicator(),
                     ],
                   )
                 : const SizedBox.shrink(),
@@ -185,6 +169,11 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Widget _buildAnimatedLogo(Color textColor) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final profileImage = isDark
+        ? 'assets/images/profile_dark.jpg'
+        : 'assets/images/profile_light.jpg';
+
     return AnimatedBuilder(
       animation: _logoController,
       builder: (context, child) {
@@ -213,15 +202,13 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ],
               ),
-              child: Center(
-                child: Text(
-                  'AC',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 2,
-                  ),
+              padding: const EdgeInsets.all(3),
+              child: ClipOval(
+                child: Image.asset(
+                  profileImage,
+                  width: 114,
+                  height: 114,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -231,50 +218,6 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  Widget _buildLoadingIndicator() {
-    return AnimatedBuilder(
-      animation: _progressController,
-      builder: (context, _) {
-        return Column(
-          children: [
-            SizedBox(
-              width: 200,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: _progressController.value,
-                  backgroundColor: AppColors.darkSurface,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Color.lerp(
-                      AppColors.darkPrimary,
-                      AppColors.darkAccent,
-                      _progressController.value,
-                    )!,
-                  ),
-                  minHeight: 4,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Loading...',
-              style: TextStyle(
-                fontSize: 12,
-                color: AppColors.darkTextSecondary,
-                letterSpacing: 2,
-              ),
-            )
-                .animate(
-                  onPlay: (controller) => controller.repeat(),
-                )
-                .fadeIn(duration: const Duration(milliseconds: 600))
-                .then()
-                .fadeOut(duration: const Duration(milliseconds: 600)),
-          ],
-        );
-      },
-    );
-  }
 }
 
 class Particle {
