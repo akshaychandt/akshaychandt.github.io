@@ -42,11 +42,13 @@ class _ProjectCardState extends State<ProjectCard> {
     final theme = Theme.of(context);
     final isMobile = ResponsiveHelper.isMobile(context);
 
-    return MouseRegion(
-      onEnter: (_) => _onEnter(context),
-      onExit: (_) => _onExit(context),
-      cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.basic,
-      child: AnimatedContainer(
+    return GestureDetector(
+      onTap: () => _showProjectDetails(context),
+      child: MouseRegion(
+        onEnter: (_) => _onEnter(context),
+        onExit: (_) => _onExit(context),
+        cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.click,
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
@@ -169,6 +171,7 @@ class _ProjectCardState extends State<ProjectCard> {
           ),
         ),
       ),
+      ),
     );
   }
 
@@ -249,6 +252,7 @@ class _ProjectCardState extends State<ProjectCard> {
         ProjectCategory.crm => 'CRM',
         ProjectCategory.pos => 'POS',
         ProjectCategory.assetManagement => 'Asset Management',
+        ProjectCategory.service => 'Service',
         ProjectCategory.openSource => 'Open Source',
         _ => 'Project',
       };
@@ -284,6 +288,26 @@ class _ProjectDetailsDialog extends StatelessWidget {
   final ProjectModel project;
 
   const _ProjectDetailsDialog({required this.project});
+
+  Widget _buildActionButton({
+    required ThemeData theme,
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return OutlinedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, size: 16),
+      label: Text(label),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: theme.colorScheme.primary,
+        side: BorderSide(color: theme.colorScheme.primary),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -391,43 +415,93 @@ class _ProjectDetailsDialog extends StatelessWidget {
                   );
                 }).toList(),
               ),
-              if (project.liveUrl != null || project.githubUrl != null) ...[
+              if (project.liveUrl != null || project.githubUrl != null || project.playStoreUrl != null || project.appStoreUrl != null) ...[
                 const SizedBox(height: 24),
-                Row(
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
                   children: [
-                    if (project.liveUrl != null)
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => UrlLauncherHelper.launchURL(project.liveUrl!),
-                          icon: const Icon(Icons.open_in_new, size: 16),
-                          label: const Text('View on pub.dev'),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: theme.colorScheme.primary,
-                            side: BorderSide(color: theme.colorScheme.primary),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
+                    // Open Source: pub.dev link
+                    if (project.category == ProjectCategory.openSource && project.liveUrl != null)
+                      _buildActionButton(
+                        theme: theme,
+                        icon: Icons.open_in_new,
+                        label: 'View on pub.dev',
+                        onPressed: () => UrlLauncherHelper.launchURL(project.liveUrl!),
                       ),
-                    if (project.liveUrl != null && project.githubUrl != null)
-                      const SizedBox(width: 12),
+                    // GitHub link (for open source)
                     if (project.githubUrl != null)
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => UrlLauncherHelper.launchURL(project.githubUrl!),
-                          icon: const Icon(Icons.code, size: 16),
-                          label: const Text('GitHub'),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: theme.colorScheme.primary,
-                            side: BorderSide(color: theme.colorScheme.primary),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                      _buildActionButton(
+                        theme: theme,
+                        icon: Icons.code,
+                        label: 'GitHub',
+                        onPressed: () => UrlLauncherHelper.launchURL(project.githubUrl!),
+                      ),
+                    // Play Store link
+                    if (project.playStoreUrl != null)
+                      _buildActionButton(
+                        theme: theme,
+                        icon: Icons.shop,
+                        label: 'Play Store',
+                        onPressed: () => UrlLauncherHelper.launchURL(project.playStoreUrl!),
+                      ),
+                    // App Store link
+                    if (project.appStoreUrl != null)
+                      _buildActionButton(
+                        theme: theme,
+                        icon: Icons.apple,
+                        label: 'App Store',
+                        onPressed: () => UrlLauncherHelper.launchURL(project.appStoreUrl!),
+                      ),
+                    // App Store in review (has Play Store but no App Store link)
+                    if (project.playStoreUrl != null && project.appStoreUrl == null)
+                      _buildActionButton(
+                        theme: theme,
+                        icon: Icons.apple,
+                        label: 'App Store',
+                        onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('App is currently in review on App Store'),
+                            duration: Duration(seconds: 2),
                           ),
                         ),
                       ),
                   ],
+                ),
+              ],
+              // Enterprise Distribution indicator (no public store links)
+              if (project.liveUrl == null &&
+                  project.githubUrl == null &&
+                  project.playStoreUrl == null &&
+                  project.appStoreUrl == null) ...[
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.secondary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: theme.colorScheme.secondary.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.business,
+                        size: 18,
+                        color: theme.colorScheme.secondary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Enterprise Distribution',
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: theme.colorScheme.secondary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ],

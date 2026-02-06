@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum ProjectCategory { all, crm, pos, assetManagement, openSource, other }
+enum ProjectCategory { all, crm, pos, assetManagement, service, openSource, other }
 
 class ProjectModel extends Equatable {
   final String id;
@@ -13,6 +13,8 @@ class ProjectModel extends Equatable {
   final String? imageUrl;
   final String? liveUrl;
   final String? githubUrl;
+  final String? playStoreUrl;
+  final String? appStoreUrl;
 
   const ProjectModel({
     required this.id,
@@ -25,6 +27,8 @@ class ProjectModel extends Equatable {
     this.imageUrl,
     this.liveUrl,
     this.githubUrl,
+    this.playStoreUrl,
+    this.appStoreUrl,
   });
 
   @override
@@ -39,5 +43,7 @@ class ProjectModel extends Equatable {
         imageUrl,
         liveUrl,
         githubUrl,
+        playStoreUrl,
+        appStoreUrl,
       ];
 }

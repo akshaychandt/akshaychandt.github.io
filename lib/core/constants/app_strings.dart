@@ -73,6 +73,7 @@ I believe in writing clean code that makes sense, and I genuinely enjoy helping 
   static const String projectsFilterCRM = 'CRM';
   static const String projectsFilterPOS = 'POS';
   static const String projectsFilterAsset = 'Asset Management';
+  static const String projectsFilterService = 'Service';
   static const String projectsFilterOpenSource = 'Open Source';
 
   // Testimonials Section
