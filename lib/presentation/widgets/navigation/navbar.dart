@@ -42,7 +42,8 @@ class Navbar extends StatelessWidget {
       if (renderBox != null) {
         final offset = renderBox.localToGlobal(Offset.zero).dy;
         final currentScroll = scrollController.offset;
-        final targetScroll = currentScroll + offset - AppDimensions.navbarHeight;
+        final targetScroll =
+            currentScroll + offset - AppDimensions.navbarHeight;
 
         scrollController.animateTo(
           targetScroll,
@@ -141,6 +142,11 @@ class Navbar extends StatelessWidget {
   }
 
   Widget _buildLogo(BuildContext context) {
+    final isDarkMode = context.watch<ThemeBloc>().state.isDarkMode;
+    final profileImage = isDarkMode
+        ? 'assets/images/profile_dark.jpg'
+        : 'assets/images/profile_light.jpg';
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -151,16 +157,22 @@ class Navbar extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
+                shape: BoxShape.circle,
                 gradient: AppColors.primaryGradient,
-                borderRadius: BorderRadius.circular(10),
               ),
-              child: const Center(
-                child: Text(
-                  'A',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+              padding: const EdgeInsets.all(2),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
+                padding: const EdgeInsets.all(2),
+                child: ClipOval(
+                  child: Image.asset(
+                    profileImage,
+                    width: 32,
+                    height: 32,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -168,9 +180,9 @@ class Navbar extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               'Akshay',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
