@@ -13,11 +13,7 @@ class ProjectCard extends StatefulWidget {
   final ProjectModel project;
   final int index;
 
-  const ProjectCard({
-    super.key,
-    required this.project,
-    required this.index,
-  });
+  const ProjectCard({super.key, required this.project, required this.index});
 
   @override
   State<ProjectCard> createState() => _ProjectCardState();
@@ -49,134 +45,142 @@ class _ProjectCardState extends State<ProjectCard> {
         onExit: (_) => _onExit(context),
         cursor: kIsWeb ? SystemMouseCursors.none : SystemMouseCursors.click,
         child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
-          border: Border.all(
-            color: _isHovered
-                ? theme.colorScheme.primary.withValues(alpha: 0.5)
-                : theme.dividerColor,
-            width: _isHovered ? 2 : 1,
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+            border: Border.all(
+              color: _isHovered
+                  ? theme.colorScheme.primary.withValues(alpha: 0.5)
+                  : theme.dividerColor,
+              width: _isHovered ? 2 : 1,
+            ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                      blurRadius: isMobile ? 15 : 30,
+                      offset: Offset(0, isMobile ? 8 : 15),
+                    ),
+                  ]
+                : null,
           ),
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.15),
-                    blurRadius: isMobile ? 15 : 30,
-                    offset: Offset(0, isMobile ? 8 : 15),
-                  ),
-                ]
-              : null,
-        ),
-        transform: _isHovered && !isMobile
-            ? (Matrix4.identity()..setTranslationRaw(0.0, -8.0, 0.0))
-            : Matrix4.identity(),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Project Header with image or gradient
-              _buildProjectHeader(theme),
+          transform: _isHovered && !isMobile
+              ? (Matrix4.identity()..setTranslationRaw(0.0, -8.0, 0.0))
+              : Matrix4.identity(),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Project Header with image or gradient
+                _buildProjectHeader(theme),
 
-              // Content
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(isMobile ? 12 : 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.project.title,
-                        style: (isMobile ? theme.textTheme.titleSmall : theme.textTheme.titleMedium)?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        widget.project.subtitle,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.primary,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: isMobile ? 8 : 12),
-                      Expanded(
-                        child: Text(
-                          widget.project.description,
-                          style: theme.textTheme.bodySmall,
-                          maxLines: _isExpanded ? 10 : (isMobile ? 2 : 3),
+                // Content
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(isMobile ? 12 : 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.project.title,
+                          style:
+                              (isMobile
+                                      ? theme.textTheme.titleSmall
+                                      : theme.textTheme.titleMedium)
+                                  ?.copyWith(fontWeight: FontWeight.w600),
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      SizedBox(height: isMobile ? 8 : 12),
-
-                      // Tech stack
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: widget.project.techStack.take(isMobile ? 3 : 4).map((tech) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              tech,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: theme.colorScheme.primary,
-                                fontSize: 10,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-
-                      // View Details
-                      SizedBox(height: isMobile ? 8 : 12),
-                      GestureDetector(
-                        onTap: () => _showProjectDetails(context),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'View Details',
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: theme.colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Icon(
-                              Icons.arrow_forward,
-                              size: 16,
-                              color: theme.colorScheme.primary,
-                            ),
-                          ],
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.project.subtitle,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
+                        SizedBox(height: isMobile ? 8 : 12),
+                        Expanded(
+                          child: Text(
+                            widget.project.description,
+                            style: theme.textTheme.bodySmall,
+                            maxLines: _isExpanded ? 10 : (isMobile ? 2 : 3),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(height: isMobile ? 8 : 12),
+
+                        // Tech stack
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: widget.project.techStack
+                              .take(isMobile ? 3 : 4)
+                              .map((tech) {
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.primary.withValues(
+                                      alpha: 0.1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    tech,
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: theme.colorScheme.primary,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                );
+                              })
+                              .toList(),
+                        ),
+
+                        // View Details
+                        SizedBox(height: isMobile ? 8 : 12),
+                        GestureDetector(
+                          onTap: () => _showProjectDetails(context),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'View Details',
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Icon(
+                                Icons.arrow_forward,
+                                size: 16,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }
 
   Widget _buildProjectHeader(ThemeData theme) {
-    final hasImage = widget.project.imageUrl != null && widget.project.imageUrl!.isNotEmpty;
+    final hasImage =
+        widget.project.imageUrl != null && widget.project.imageUrl!.isNotEmpty;
 
     return SizedBox(
       height: 80,
@@ -188,9 +192,8 @@ class _ProjectCardState extends State<ProjectCard> {
             CachedNetworkImage(
               imageUrl: widget.project.imageUrl!,
               fit: BoxFit.cover,
-              placeholder: (context, url) => const ShimmerEffect(
-                borderRadius: BorderRadius.zero,
-              ),
+              placeholder: (context, url) =>
+                  const ShimmerEffect(borderRadius: BorderRadius.zero),
               errorWidget: (context, url, error) => Container(
                 decoration: const BoxDecoration(
                   gradient: AppColors.primaryGradient,
@@ -226,10 +229,7 @@ class _ProjectCardState extends State<ProjectCard> {
             top: 12,
             left: 12,
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 4,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
@@ -249,18 +249,18 @@ class _ProjectCardState extends State<ProjectCard> {
   }
 
   String _getCategoryLabel(ProjectCategory category) => switch (category) {
-        ProjectCategory.crm => 'CRM',
-        ProjectCategory.pos => 'POS',
-        ProjectCategory.assetManagement => 'Asset Management',
-        ProjectCategory.service => 'Service',
-        ProjectCategory.openSource => 'Open Source',
-        _ => 'Project',
-      };
+    ProjectCategory.crm => 'CRM',
+    ProjectCategory.pos => 'POS',
+    ProjectCategory.assetManagement => 'Asset Management',
+    ProjectCategory.service => 'Service',
+    ProjectCategory.openSource => 'Open Source',
+    _ => 'Project',
+  };
 
   void _showProjectDetails(BuildContext context) => showDialog(
-        context: context,
-        builder: (context) => _ProjectDetailsDialog(project: widget.project),
-      );
+    context: context,
+    builder: (context) => _ProjectDetailsDialog(project: widget.project),
+  );
 }
 
 class _PatternPainter extends CustomPainter {
@@ -289,29 +289,164 @@ class _ProjectDetailsDialog extends StatelessWidget {
 
   const _ProjectDetailsDialog({required this.project});
 
-  Widget _buildActionButton({
+  // --- Collect action descriptors ---
+
+  List<({IconData icon, String tooltip, VoidCallback onPressed})>
+  _collectActions(BuildContext context) {
+    final actions =
+        <({IconData icon, String tooltip, VoidCallback onPressed})>[];
+
+    if (project.category == ProjectCategory.openSource &&
+        project.liveUrl != null) {
+      actions.add((
+        icon: Icons.open_in_new_rounded,
+        tooltip: 'View on pub.dev',
+        onPressed: () => UrlLauncherHelper.launchURL(project.liveUrl!),
+      ));
+    }
+    if (project.githubUrl != null) {
+      actions.add((
+        icon: Icons.code_rounded,
+        tooltip: 'GitHub',
+        onPressed: () => UrlLauncherHelper.launchURL(project.githubUrl!),
+      ));
+    }
+    if (project.playStoreUrl != null) {
+      actions.add((
+        icon: Icons.shop_rounded,
+        tooltip: 'Play Store',
+        onPressed: () => UrlLauncherHelper.launchURL(project.playStoreUrl!),
+      ));
+    }
+    if (project.appStoreUrl != null) {
+      actions.add((
+        icon: Icons.apple_rounded,
+        tooltip: 'App Store',
+        onPressed: () => UrlLauncherHelper.launchURL(project.appStoreUrl!),
+      ));
+    }
+    if (project.playStoreUrl != null && project.appStoreUrl == null) {
+      actions.add((
+        icon: Icons.apple_rounded,
+        tooltip: 'App Store (In Review)',
+        onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('App is currently in review on App Store'),
+            duration: Duration(seconds: 2),
+          ),
+        ),
+      ));
+    }
+    return actions;
+  }
+
+  // --- Icon button builder ---
+
+  Widget _buildIconAction({
     required ThemeData theme,
     required IconData icon,
-    required String label,
+    required String tooltip,
     required VoidCallback onPressed,
-  }) {
-    return OutlinedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, size: 16),
-      label: Text(label),
-      style: OutlinedButton.styleFrom(
-        foregroundColor: theme.colorScheme.primary,
-        side: BorderSide(color: theme.colorScheme.primary),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+  }) => Tooltip(
+    message: tooltip,
+    waitDuration: const Duration(milliseconds: 400),
+    child: Material(
+      color: theme.colorScheme.primary.withValues(alpha: 0.08),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: onPressed,
+        hoverColor: theme.colorScheme.primary.withValues(alpha: 0.15),
+        splashColor: theme.colorScheme.primary.withValues(alpha: 0.2),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Icon(icon, size: 18, color: theme.colorScheme.primary),
         ),
       ),
-    );
-  }
+    ),
+  );
+
+  // --- Scrollable content items ---
+
+  List<Widget> _buildScrollableContent(ThemeData theme) => [
+    // Description
+    Text(project.description, style: theme.textTheme.bodyLarge),
+    const SizedBox(height: 24),
+
+    // Key Features header
+    Text(
+      'Key Features',
+      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+    ),
+    const SizedBox(height: 12),
+
+    // Feature items
+    ...project.features.map(
+      (feature) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.check_circle,
+              size: 18,
+              color: theme.colorScheme.primary,
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(feature, style: theme.textTheme.bodyMedium)),
+          ],
+        ),
+      ),
+    ),
+    const SizedBox(height: 24),
+
+    // Tech Stack header
+    Text(
+      'Tech Stack',
+      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+    ),
+    const SizedBox(height: 12),
+
+    // Tech chips
+    Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: project.techStack.map((tech) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: theme.colorScheme.primary.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Text(
+            tech,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: theme.colorScheme.primary,
+            ),
+          ),
+        );
+      }).toList(),
+    ),
+
+    // Bottom padding so content doesn't feel cramped
+    const SizedBox(height: 16),
+  ];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isMobile = ResponsiveHelper.isMobile(context);
+    final actions = _collectActions(context);
+
+    final hasNoLinks =
+        project.liveUrl == null &&
+        project.githubUrl == null &&
+        project.playStoreUrl == null &&
+        project.appStoreUrl == null;
 
     return Dialog(
       backgroundColor: theme.colorScheme.surface,
@@ -319,193 +454,126 @@ class _ProjectDetailsDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
       ),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 600, maxHeight: 600),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
+        constraints: BoxConstraints(
+          maxWidth: 600,
+          maxHeight: screenHeight * 0.8,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ── FIXED TOP: Title row + action icons + subtitle ──
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                isMobile ? 16 : 24,
+                isMobile ? 16 : 20,
+                isMobile ? 8 : 12,
+                0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      project.title,
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                project.subtitle,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                project.description,
-                style: theme.textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Key Features',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 12),
-              ...project.features.map((feature) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.check_circle,
-                          size: 18,
-                          color: theme.colorScheme.primary,
+                  // Title + action icons + close
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          project.title,
+                          style:
+                              (isMobile
+                                      ? theme.textTheme.titleLarge
+                                      : theme.textTheme.headlineSmall)
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            feature,
-                            style: theme.textTheme.bodyMedium,
+                      ),
+                      // Action icon buttons
+                      if (actions.isNotEmpty) ...[
+                        ...actions.map(
+                          (a) => Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: _buildIconAction(
+                              theme: theme,
+                              icon: a.icon,
+                              tooltip: a.tooltip,
+                              onPressed: a.onPressed,
+                            ),
                           ),
+                        ),
+                        // Subtle vertical divider before close
+                        Container(
+                          height: 24,
+                          width: 1,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          color: theme.dividerColor,
                         ),
                       ],
-                    ),
-                  )),
-              const SizedBox(height: 24),
-              Text(
-                'Tech Stack',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: project.techStack.map((tech) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Text(
-                      tech,
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-              if (project.liveUrl != null || project.githubUrl != null || project.playStoreUrl != null || project.appStoreUrl != null) ...[
-                const SizedBox(height: 24),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    // Open Source: pub.dev link
-                    if (project.category == ProjectCategory.openSource && project.liveUrl != null)
-                      _buildActionButton(
-                        theme: theme,
-                        icon: Icons.open_in_new,
-                        label: 'View on pub.dev',
-                        onPressed: () => UrlLauncherHelper.launchURL(project.liveUrl!),
-                      ),
-                    // GitHub link (for open source)
-                    if (project.githubUrl != null)
-                      _buildActionButton(
-                        theme: theme,
-                        icon: Icons.code,
-                        label: 'GitHub',
-                        onPressed: () => UrlLauncherHelper.launchURL(project.githubUrl!),
-                      ),
-                    // Play Store link
-                    if (project.playStoreUrl != null)
-                      _buildActionButton(
-                        theme: theme,
-                        icon: Icons.shop,
-                        label: 'Play Store',
-                        onPressed: () => UrlLauncherHelper.launchURL(project.playStoreUrl!),
-                      ),
-                    // App Store link
-                    if (project.appStoreUrl != null)
-                      _buildActionButton(
-                        theme: theme,
-                        icon: Icons.apple,
-                        label: 'App Store',
-                        onPressed: () => UrlLauncherHelper.launchURL(project.appStoreUrl!),
-                      ),
-                    // App Store in review (has Play Store but no App Store link)
-                    if (project.playStoreUrl != null && project.appStoreUrl == null)
-                      _buildActionButton(
-                        theme: theme,
-                        icon: Icons.apple,
-                        label: 'App Store',
-                        onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('App is currently in review on App Store'),
-                            duration: Duration(seconds: 2),
+                      // Enterprise badge (small icon) if no links
+                      if (hasNoLinks) ...[
+                        Tooltip(
+                          message: 'Enterprise Distribution',
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.secondary.withValues(
+                                alpha: 0.1,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              Icons.business_rounded,
+                              size: 18,
+                              color: theme.colorScheme.secondary,
+                            ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
-              ],
-              // Enterprise Distribution indicator (no public store links)
-              if (project.liveUrl == null &&
-                  project.githubUrl == null &&
-                  project.playStoreUrl == null &&
-                  project.appStoreUrl == null) ...[
-                const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.secondary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: theme.colorScheme.secondary.withValues(alpha: 0.3),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.business,
-                        size: 18,
-                        color: theme.colorScheme.secondary,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Enterprise Distribution',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.secondary,
-                          fontWeight: FontWeight.w600,
+                        Container(
+                          height: 24,
+                          width: 1,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          color: theme.dividerColor,
+                        ),
+                      ],
+                      IconButton(
+                        icon: const Icon(Icons.close_rounded),
+                        onPressed: () => Navigator.pop(context),
+                        style: IconButton.styleFrom(
+                          backgroundColor: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.05),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ],
-          ),
+                  const SizedBox(height: 6),
+                  Text(
+                    project.subtitle,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 24),
+
+            // ── SCROLLABLE MIDDLE ──
+            Flexible(
+              child: CustomScrollView(
+                shrinkWrap: true,
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 16 : 24,
+                    ),
+                    sliver: SliverList.list(
+                      children: _buildScrollableContent(theme),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
