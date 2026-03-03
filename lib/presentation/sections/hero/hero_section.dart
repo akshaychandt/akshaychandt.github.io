@@ -39,7 +39,9 @@ class HeroSection extends StatelessWidget {
           // Content
           Center(
             child: Padding(
-              padding: ResponsiveHelper.sectionPadding(context),
+              padding: ResponsiveHelper.sectionPadding(
+                context,
+              ).copyWith(bottom: isMobile ? 160 : null),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   maxWidth: ResponsiveHelper.contentMaxWidth(context),
@@ -51,36 +53,56 @@ class HeroSection extends StatelessWidget {
             ),
           ),
 
-          // Scroll Indicator
-          Positioned(
-            bottom: 40,
-            left: 0,
-            right: 0,
-            child: Center(child: _buildScrollIndicator(context)),
-          ),
+          // Social Links + Scroll Indicator (mobile only, positioned at bottom)
+          if (isMobile)
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SocialLinks().animate().fadeIn(
+                    delay: 1000.ms,
+                    duration: 500.ms,
+                  ),
+                  const SizedBox(height: 16),
+                  _buildScrollIndicator(context),
+                ],
+              ),
+            ),
+
+          // Scroll Indicator (desktop/tablet only)
+          if (!isMobile)
+            Positioned(
+              bottom: 40,
+              left: 0,
+              right: 0,
+              child: Center(child: _buildScrollIndicator(context)),
+            ),
         ],
       ),
     );
   }
 
   Widget _buildDesktopLayout(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(flex: 3, child: _buildHeroContent(context)),
-          const SizedBox(width: 48),
-          Expanded(flex: 2, child: _buildProfileImage(context)),
-        ],
-      );
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Expanded(flex: 3, child: _buildHeroContent(context)),
+      const SizedBox(width: 48),
+      Expanded(flex: 2, child: _buildProfileImage(context)),
+    ],
+  );
 
   Widget _buildMobileLayout(BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildProfileImage(context, size: 120),
-          const SizedBox(height: 16),
-          _buildHeroContent(context, centerAlign: true),
-        ],
-      );
+    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      _buildProfileImage(context, size: 120),
+      const SizedBox(height: 16),
+      _buildHeroContent(context, centerAlign: true),
+    ],
+  );
 
   Widget _buildHeroContent(BuildContext context, {bool centerAlign = false}) {
     final theme = Theme.of(context);
@@ -130,7 +152,12 @@ class HeroSection extends StatelessWidget {
             child: AnimatedTextKit(
               repeatForever: true,
               animatedTexts: AppStrings.animatedRoles
-                  .map((role) => TypewriterAnimatedText(role, speed: const Duration(milliseconds: 100)))
+                  .map(
+                    (role) => TypewriterAnimatedText(
+                      role,
+                      speed: const Duration(milliseconds: 100),
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -175,10 +202,15 @@ class HeroSection extends StatelessWidget {
           ],
         ),
 
-        SizedBox(height: isMobile ? 20 : 32),
-
-        // Social Links
-        const SocialLinks().animate().fadeIn(delay: 1000.ms, duration: 500.ms),
+        // Social Links (desktop/tablet only - on mobile they're positioned at bottom)
+        if (!isMobile)
+          Padding(
+            padding: const EdgeInsets.only(top: 32),
+            child: const SocialLinks().animate().fadeIn(
+              delay: 1000.ms,
+              duration: 500.ms,
+            ),
+          ),
       ],
     );
   }

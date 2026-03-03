@@ -19,8 +19,9 @@ class SectionTitle extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Column(
-      crossAxisAlignment:
-          centerAlign ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: centerAlign
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -34,10 +35,13 @@ class SectionTitle extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Text(
-              title,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+            Flexible(
+              child: Text(
+                title,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             const SizedBox(width: 12),
