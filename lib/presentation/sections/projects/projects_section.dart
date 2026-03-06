@@ -43,7 +43,9 @@ class ProjectsSection extends StatelessWidget {
                   return ProjectFilter(
                     selectedCategory: state.selectedCategory,
                     onCategorySelected: (category) {
-                      context.read<ProjectsBloc>().add(FilterProjectsEvent(category));
+                      context.read<ProjectsBloc>().add(
+                        FilterProjectsEvent(category),
+                      );
                     },
                   ).animate().fadeIn(duration: 500.ms);
                 },
@@ -55,9 +57,7 @@ class ProjectsSection extends StatelessWidget {
               BlocBuilder<ProjectsBloc, ProjectsState>(
                 builder: (context, state) {
                   if (state.filteredProjects.isEmpty) {
-                    return const Center(
-                      child: Text('No projects found'),
-                    );
+                    return const Center(child: Text('No projects found'));
                   }
 
                   return LayoutBuilder(
@@ -66,9 +66,13 @@ class ProjectsSection extends StatelessWidget {
                       final cardWidth = isMobile
                           ? constraints.maxWidth
                           : isTablet
-                              ? (constraints.maxWidth - AppDimensions.spacingLg) / 2
-                              : (constraints.maxWidth - AppDimensions.spacingLg * 2) / 3;
-                      final cardHeight = isMobile ? cardWidth * 0.9 : cardWidth * 1.15;
+                          ? (constraints.maxWidth - AppDimensions.spacingLg) / 2
+                          : (constraints.maxWidth -
+                                    AppDimensions.spacingLg * 2) /
+                                3;
+                      final cardHeight = isMobile
+                          ? cardWidth * 0.9
+                          : cardWidth * 1.1;
 
                       return GridView.builder(
                         shrinkWrap: true,
@@ -82,12 +86,12 @@ class ProjectsSection extends StatelessWidget {
                         itemCount: state.filteredProjects.length,
                         itemBuilder: (context, index) {
                           final project = state.filteredProjects[index];
-                          return ProjectCard(
-                            project: project,
-                            index: index,
-                          ).animate(delay: Duration(milliseconds: index * 100))
-                            .fadeIn(duration: 500.ms)
-                            .scale(begin: const Offset(0.95, 0.95));
+                          return ProjectCard(project: project, index: index)
+                              .animate(
+                                delay: Duration(milliseconds: index * 100),
+                              )
+                              .fadeIn(duration: 500.ms)
+                              .scale(begin: const Offset(0.95, 0.95));
                         },
                       );
                     },

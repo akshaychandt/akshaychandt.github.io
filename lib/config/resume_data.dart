@@ -161,8 +161,19 @@ class ResumeData {
         'Google Calendar API',
       ],
       category: ProjectCategory.crm,
-      playStoreUrl: 'https://play.google.com/store/apps/details?id=com.winsource.crm',
-      appStoreUrl: 'https://apps.apple.com/in/app/the-wine-source-crm/id6738278414',
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.winsource.crm',
+      appStoreUrl:
+          'https://apps.apple.com/in/app/the-wine-source-crm/id6738278414',
+      role: 'Lead Developer',
+      duration: 'Aug 2023 – Present',
+      platforms: ['Android', 'iOS'],
+      highlights: [
+        'Full SAP ERP integration with bidirectional sync',
+        'In-app Gmail & Google Calendar integration',
+        'Offline-first architecture with intelligent sync',
+        'Published on Play Store & App Store',
+      ],
     ),
     ProjectModel(
       id: '2',
@@ -188,6 +199,15 @@ class ResumeData {
         'Thermal Printer SDK',
       ],
       category: ProjectCategory.pos,
+      role: 'Lead Developer',
+      duration: 'Jan 2023 – Jul 2023',
+      platforms: ['Android', 'iOS'],
+      highlights: [
+        'Queue-based offline sync architecture',
+        'Geo-fencing for automatic attendance',
+        'Thermal printer integration for receipts',
+        'Route optimization with geo-mapping',
+      ],
     ),
     ProjectModel(
       id: '3',
@@ -213,6 +233,15 @@ class ResumeData {
         'Push Notifications',
       ],
       category: ProjectCategory.assetManagement,
+      role: 'Lead Developer',
+      duration: 'Mar 2023 – Aug 2023',
+      platforms: ['Android', 'iOS'],
+      highlights: [
+        'QR/Barcode scanning for asset identification',
+        'Automated depreciation & disposal workflows',
+        'GPS-based real-time asset tracking',
+        'Comprehensive audit trail system',
+      ],
     ),
     ProjectModel(
       id: '4',
@@ -239,6 +268,15 @@ class ResumeData {
       category: ProjectCategory.openSource,
       liveUrl: 'https://pub.dev/packages/inline_logger',
       githubUrl: 'https://github.com/akshaychandt/inline_logger',
+      role: 'Author & Maintainer',
+      duration: 'Oct 2024 – Present',
+      platforms: ['Android', 'iOS', 'Web', 'Windows', 'macOS', 'Linux'],
+      highlights: [
+        'Published on pub.dev',
+        'Zero overhead in release mode',
+        'Open source with community contributions',
+        'Multi-platform support',
+      ],
     ),
     ProjectModel(
       id: '5',
@@ -262,6 +300,14 @@ class ResumeData {
         'SQLite',
       ],
       category: ProjectCategory.service,
+      role: 'Lead Developer',
+      duration: 'Nov 2022 – Mar 2023',
+      platforms: ['Android', 'iOS'],
+      highlights: [
+        'Real-time push notifications for task alerts',
+        'Offline-capable field operations',
+        'Integrated team communication channel',
+      ],
     ),
     ProjectModel(
       id: '6',
@@ -285,6 +331,14 @@ class ResumeData {
         'SQLite',
       ],
       category: ProjectCategory.service,
+      role: 'Lead Developer',
+      duration: 'Nov 2022 – Mar 2023',
+      platforms: ['Android', 'iOS'],
+      highlights: [
+        'Zone-based complaint management',
+        'Team workload monitoring dashboard',
+        'Real-time task assignment workflow',
+      ],
     ),
     ProjectModel(
       id: '7',
@@ -312,6 +366,15 @@ class ResumeData {
         'GPS Tracking',
       ],
       category: ProjectCategory.assetManagement,
+      role: 'Lead Developer',
+      duration: 'Apr 2023 – Present',
+      platforms: ['Android', 'iOS', 'Windows'],
+      highlights: [
+        'Multi-platform: Android, iOS & Windows',
+        'Full SAP supply chain integration',
+        'Intercompany & warehouse transfers',
+        'Real-time GPS asset tracking',
+      ],
     ),
     ProjectModel(
       id: '8',
@@ -337,8 +400,18 @@ class ResumeData {
         'REST API',
       ],
       category: ProjectCategory.crm,
-      playStoreUrl: 'https://play.google.com/store/apps/details?id=com.fieldnxt.bethalia',
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.fieldnxt.bethalia',
       appStoreUrl: 'https://apps.apple.com/in/app/bethalia-crm/id6670597464',
+      role: 'Lead Developer',
+      duration: 'Jun 2023 – Dec 2023',
+      platforms: ['Android', 'iOS'],
+      highlights: [
+        'SAP Business One real-time integration',
+        'Sales performance analytics & tracking',
+        'Published on Play Store & App Store',
+        'Customer behavior insights dashboard',
+      ],
     ),
     ProjectModel(
       id: '9',
@@ -365,7 +438,17 @@ class ResumeData {
         'GPS Tracking',
       ],
       category: ProjectCategory.crm,
-      playStoreUrl: 'https://play.google.com/store/apps/details?id=com.irtech.crm',
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.irtech.crm',
+      role: 'Lead Developer',
+      duration: 'Jan 2024 – Present',
+      platforms: ['Android', 'iOS'],
+      highlights: [
+        'CRM + Field Service in a single app',
+        'Real-time field user location tracking',
+        'Web portal for lead management',
+        'Dynamic reporting & analytics',
+      ],
     ),
   ];
 

@@ -21,7 +21,6 @@ class ProjectCard extends StatefulWidget {
 
 class _ProjectCardState extends State<ProjectCard> {
   bool _isHovered = false;
-  final bool _isExpanded = false;
 
   void _onEnter(BuildContext context) {
     setState(() => _isHovered = true);
@@ -79,10 +78,11 @@ class _ProjectCardState extends State<ProjectCard> {
                 // Content
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.all(isMobile ? 12 : 16),
+                    padding: EdgeInsets.all(isMobile ? 12 : 14),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Title
                         Text(
                           widget.project.title,
                           style:
@@ -93,7 +93,8 @@ class _ProjectCardState extends State<ProjectCard> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 3),
+                        // Subtitle
                         Text(
                           widget.project.subtitle,
                           style: theme.textTheme.bodySmall?.copyWith(
@@ -102,18 +103,30 @@ class _ProjectCardState extends State<ProjectCard> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: isMobile ? 8 : 12),
+                        SizedBox(height: isMobile ? 6 : 8),
+
+                        // Middle: Description + Feature bullets (clips silently)
                         Expanded(
-                          child: Text(
-                            widget.project.description,
-                            style: theme.textTheme.bodySmall,
-                            maxLines: _isExpanded ? 10 : (isMobile ? 2 : 3),
-                            overflow: TextOverflow.ellipsis,
+                          child: SingleChildScrollView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.project.description,
+                                  style: theme.textTheme.bodySmall,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(height: isMobile ? 6 : 8),
+                                ..._buildFeatureBullets(theme, isMobile),
+                              ],
+                            ),
                           ),
                         ),
-                        SizedBox(height: isMobile ? 8 : 12),
+                        SizedBox(height: isMobile ? 4 : 6),
 
-                        // Tech stack
+                        // Bottom: Tech stack (pinned)
                         Wrap(
                           spacing: 6,
                           runSpacing: 6,
@@ -123,7 +136,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                 return Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 8,
-                                    vertical: 4,
+                                    vertical: 3,
                                   ),
                                   decoration: BoxDecoration(
                                     color: theme.colorScheme.primary.withValues(
@@ -143,8 +156,8 @@ class _ProjectCardState extends State<ProjectCard> {
                               .toList(),
                         ),
 
-                        // View Details
-                        SizedBox(height: isMobile ? 8 : 12),
+                        // View Details (pinned)
+                        SizedBox(height: isMobile ? 6 : 8),
                         GestureDetector(
                           onTap: () => _showProjectDetails(context),
                           child: Row(
@@ -176,6 +189,73 @@ class _ProjectCardState extends State<ProjectCard> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildFeatureBullets(ThemeData theme, bool isMobile) {
+    final featureCount = isMobile ? 2 : 3;
+    final featuresToShow = widget.project.features.take(featureCount).toList();
+
+    return featuresToShow.map((feature) {
+      final displayText = _truncateFeature(feature);
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 3),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Container(
+                width: 5,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.7),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                displayText,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontSize: 11,
+                  color: theme.textTheme.bodySmall?.color?.withValues(
+                    alpha: 0.8,
+                  ),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList();
+  }
+
+  String _truncateFeature(String feature) {
+    // Clean up feature text for compact display
+    // Remove leading verbs like "Integrated", "Implemented", "Designed", etc.
+    final cleanedPatterns = [
+      'Integrated ',
+      'Implemented ',
+      'Designed ',
+      'Built ',
+      'Developed ',
+      'Automated ',
+    ];
+    String cleaned = feature;
+    for (final pattern in cleanedPatterns) {
+      if (cleaned.startsWith(pattern)) {
+        cleaned = cleaned.substring(pattern.length);
+        // Capitalize the next word
+        if (cleaned.isNotEmpty) {
+          cleaned = cleaned[0].toUpperCase() + cleaned.substring(1);
+        }
+        break;
+      }
+    }
+    return cleaned;
   }
 
   Widget _buildProjectHeader(ThemeData theme) {
@@ -366,74 +446,305 @@ class _ProjectDetailsDialog extends StatelessWidget {
     ),
   );
 
-  // --- Scrollable content items ---
+  // --- Platform icon helper ---
 
-  List<Widget> _buildScrollableContent(ThemeData theme) => [
-    // Description
-    Text(project.description, style: theme.textTheme.bodyLarge),
-    const SizedBox(height: 24),
+  IconData _platformIcon(String platform) => switch (platform.toLowerCase()) {
+    'android' => Icons.android_rounded,
+    'ios' => Icons.apple_rounded,
+    'web' => Icons.language_rounded,
+    'windows' => Icons.desktop_windows_rounded,
+    'macos' => Icons.laptop_mac_rounded,
+    'linux' => Icons.computer_rounded,
+    _ => Icons.devices_rounded,
+  };
 
-    // Key Features header
-    Text(
-      'Key Features',
-      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-    ),
-    const SizedBox(height: 12),
+  // --- Project Info Bar ---
 
-    // Feature items
-    ...project.features.map(
-      (feature) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.check_circle,
-              size: 18,
-              color: theme.colorScheme.primary,
-            ),
-            const SizedBox(width: 12),
-            Expanded(child: Text(feature, style: theme.textTheme.bodyMedium)),
-          ],
+  Widget _buildInfoBar(ThemeData theme, bool isMobile) {
+    final hasRole = project.role != null && project.role!.isNotEmpty;
+    final hasDuration =
+        project.duration != null && project.duration!.isNotEmpty;
+    final hasPlatforms =
+        project.platforms != null && project.platforms!.isNotEmpty;
+
+    if (!hasRole && !hasDuration && !hasPlatforms) {
+      return const SizedBox.shrink();
+    }
+
+    final items = <Widget>[];
+
+    if (hasRole) {
+      items.add(
+        _buildInfoChip(
+          theme: theme,
+          icon: Icons.person_outline_rounded,
+          label: project.role!,
+          isMobile: isMobile,
+        ),
+      );
+    }
+
+    if (hasDuration) {
+      items.add(
+        _buildInfoChip(
+          theme: theme,
+          icon: Icons.calendar_today_rounded,
+          label: project.duration!,
+          isMobile: isMobile,
+        ),
+      );
+    }
+
+    if (hasPlatforms) {
+      items.add(
+        _buildInfoChip(
+          theme: theme,
+          icon: Icons.devices_rounded,
+          label: project.platforms!.join(', '),
+          isMobile: isMobile,
+        ),
+      );
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 12 : 16,
+        vertical: isMobile ? 10 : 12,
+      ),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.1),
         ),
       ),
-    ),
-    const SizedBox(height: 24),
+      child: Wrap(spacing: isMobile ? 12 : 20, runSpacing: 8, children: items),
+    );
+  }
+
+  Widget _buildInfoChip({
+    required ThemeData theme,
+    required IconData icon,
+    required String label,
+    required bool isMobile,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          size: isMobile ? 14 : 16,
+          color: theme.colorScheme.primary.withValues(alpha: 0.7),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style:
+              (isMobile
+                      ? theme.textTheme.bodySmall
+                      : theme.textTheme.bodyMedium)
+                  ?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                  ),
+        ),
+      ],
+    );
+  }
+
+  // --- Scrollable content items ---
+
+  List<Widget> _buildScrollableContent(ThemeData theme, bool isMobile) {
+    final content = <Widget>[];
+
+    // Project Info Bar
+    final infoBar = _buildInfoBar(theme, isMobile);
+    if (infoBar is! SizedBox) {
+      content.add(infoBar);
+      content.add(const SizedBox(height: 20));
+    }
+
+    // Description
+    content.add(Text(project.description, style: theme.textTheme.bodyLarge));
+    content.add(const SizedBox(height: 24));
+
+    // Key Features header
+    content.add(
+      Text(
+        'Key Features',
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+    content.add(const SizedBox(height: 12));
+
+    // Feature items
+    content.addAll(
+      project.features.map(
+        (feature) => Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.check_circle,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 12),
+              Expanded(child: Text(feature, style: theme.textTheme.bodyMedium)),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // Key Highlights section
+    if (project.highlights != null && project.highlights!.isNotEmpty) {
+      content.add(const SizedBox(height: 24));
+      content.add(
+        Text(
+          'Key Highlights',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+      content.add(const SizedBox(height: 12));
+
+      content.add(
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: project.highlights!.map((highlight) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.secondary.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: theme.colorScheme.secondary.withValues(alpha: 0.15),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.star_rounded,
+                    size: 16,
+                    color: theme.colorScheme.secondary,
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      highlight,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
+
+    content.add(const SizedBox(height: 24));
 
     // Tech Stack header
-    Text(
-      'Tech Stack',
-      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-    ),
-    const SizedBox(height: 12),
+    content.add(
+      Text(
+        'Tech Stack',
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+    content.add(const SizedBox(height: 12));
 
     // Tech chips
-    Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: project.techStack.map((tech) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: theme.colorScheme.primary.withValues(alpha: 0.3),
+    content.add(
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: project.techStack.map((tech) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: theme.colorScheme.primary.withValues(alpha: 0.3),
+              ),
             ),
-          ),
-          child: Text(
-            tech,
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: theme.colorScheme.primary,
+            child: Text(
+              tech,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
             ),
+          );
+        }).toList(),
+      ),
+    );
+
+    // Platform Badges
+    if (project.platforms != null && project.platforms!.isNotEmpty) {
+      content.add(const SizedBox(height: 24));
+      content.add(
+        Text(
+          'Platforms',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
           ),
-        );
-      }).toList(),
-    ),
+        ),
+      );
+      content.add(const SizedBox(height: 12));
+
+      content.add(
+        Wrap(
+          spacing: 12,
+          runSpacing: 10,
+          children: project.platforms!.map((platform) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _platformIcon(platform),
+                    size: 18,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    platform,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
 
     // Bottom padding so content doesn't feel cramped
-    const SizedBox(height: 16),
-  ];
+    content.add(const SizedBox(height: 16));
+
+    return content;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -567,7 +878,7 @@ class _ProjectDetailsDialog extends StatelessWidget {
                       horizontal: isMobile ? 16 : 24,
                     ),
                     sliver: SliverList.list(
-                      children: _buildScrollableContent(theme),
+                      children: _buildScrollableContent(theme, isMobile),
                     ),
                   ),
                 ],

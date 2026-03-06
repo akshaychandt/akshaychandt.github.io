@@ -1,6 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-enum ProjectCategory { all, crm, pos, assetManagement, service, openSource, other }
+enum ProjectCategory {
+  all,
+  crm,
+  pos,
+  assetManagement,
+  service,
+  openSource,
+  other,
+}
 
 class ProjectModel extends Equatable {
   final String id;
@@ -15,6 +23,10 @@ class ProjectModel extends Equatable {
   final String? githubUrl;
   final String? playStoreUrl;
   final String? appStoreUrl;
+  final String? role;
+  final String? duration;
+  final List<String>? platforms;
+  final List<String>? highlights;
 
   const ProjectModel({
     required this.id,
@@ -29,21 +41,29 @@ class ProjectModel extends Equatable {
     this.githubUrl,
     this.playStoreUrl,
     this.appStoreUrl,
+    this.role,
+    this.duration,
+    this.platforms,
+    this.highlights,
   });
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        subtitle,
-        description,
-        features,
-        techStack,
-        category,
-        imageUrl,
-        liveUrl,
-        githubUrl,
-        playStoreUrl,
-        appStoreUrl,
-      ];
+    id,
+    title,
+    subtitle,
+    description,
+    features,
+    techStack,
+    category,
+    imageUrl,
+    liveUrl,
+    githubUrl,
+    playStoreUrl,
+    appStoreUrl,
+    role,
+    duration,
+    platforms,
+    highlights,
+  ];
 }
